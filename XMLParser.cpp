@@ -347,7 +347,7 @@ std::string getTextFromNamedChild(TiXmlElement* element, std::string name) {
  * Parses the XML file for the given filename. Returns a vector of students if successful
  * If failed, prints an error and returns an empty vector
  */
-std::vector<Student*> XMLParser::parseXML(std::string filename) {
+Dungeon* XMLParser::parseXML(std::string filename) {
 	// start parsing XML, we first need to create a TiXmlDocument and read it
 	TiXmlDocument doc(filename);
 	doc.LoadFile();
@@ -361,8 +361,8 @@ std::vector<Student*> XMLParser::parseXML(std::string filename) {
 		return NULL;
 	}
 	// this validation is not strictly needed, but its can help avoid the problem of accidently using an XML file from the wrong source
-	if (rootElement->ValueStr() != "Map") {
-		std::cerr << "Invalid XML file, should start with a Map" << std::endl;
+	if (rootElement->ValueStr() != "map") {
+		std::cerr << "Invalid XML file, should start with a 'map'" << std::endl;
 		return NULL;
 	}
 	// found the proper root element, so call the relevant parsing function
