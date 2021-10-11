@@ -1,10 +1,16 @@
+#ifndef Dungeon_H_
+#define Dungeon_H_
+
 #include <string>
 #include <vector>
+#include "Room.h"
+#include "Item.h"
+#include "Container.h"
+#include "Creature.h"
 
 class Dungeon {
 public:
-    Dungeon(std::string name);
-    virtual void getDungeon(std::string name);
+    Dungeon();
     virtual void addRoom(Room room);
     virtual void addItem(Item item);
     virtual void addCreature(Creature creature);
@@ -15,3 +21,5 @@ private:
     std::vector<Item> items;
     std::vector<Container> containers;
 };
+
+#endif

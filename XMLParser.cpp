@@ -76,7 +76,7 @@ Room* XMLParser::parseRoom(TiXmlElement* element) {
 				room->setDescription(value);
 			}
             else if (name == "border") {
-				std::string direction = getTextFromNamedChild(childElement, "direction")
+				std::string direction = getTextFromNamedChild(childElement, "direction");
                 if(direction == "north") {
                     room->setNorth(getTextFromNamedChild(childElement, "name"));
                 }
@@ -90,26 +90,29 @@ Room* XMLParser::parseRoom(TiXmlElement* element) {
                     room->setWest(getTextFromNamedChild(childElement, "name"));
                 }
 			}
-            else if (childElement->ValueStr() == "Item") {
-                dungeon->addItem(parseItem(childElement));
+            else if (name == "item") {
+                room->addItem(value);
             }
-            else if (childElement->ValueStr() == "Container") {
-                dungeon->addContainer(parseContainer(childElement));
+            else if (name == "container") {
+                room->addContainer(value);
             }
-            else if (childElement->ValueStr() == "Creature") {
-                dungeon->addCreature(parseCreature(childElement));
+            else if (name == "creature") {
+                room->addCreature(value);
             }
+			else if (name == "trigger") {
+				room->addTrigger(parseTrigger(childElement));
+			}
 		}
 	}
 
 	return room;
 }
 
-Course* XMLParser::parseCourse(TiXmlElement* element) {
+Item* XMLParser::parseItem(TiXmlElement* element) {
 	// there are two different ways to parse the values contained in nested elements
 	// this function iterates all the elements child nodes nodes, and if an element matches one of the expected names then set the cooresponding attribute
 	// see parseClub for the other method
-	Course* course = new Course();
+	Item* item = new Item();
 
 	// iterate child nodes using IterateChildren in a for loop. This method is a bit more verbose than the while loop used by `parseStudents`, but it is also much easier to read
 	// `parseStudent` shows a cleaner way of using a for loop via FirstChild and NextSibling instead. You could also mix the two methods, using FirstChild and IterateChildren for instance
@@ -122,31 +125,201 @@ Course* XMLParser::parseCourse(TiXmlElement* element) {
 			std::string value = childElement->GetText();
 
 			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
-			if (name == "instructor") {
-				course->setInstructor(value);
+			if (name == "name") {
+				item->setName(value);
 			}
-			else if (name == "credit") {
-				course->setCredit(std::stoi(value));
+			else if (name == "status") {
+				item->setStatus(value);
 			}
-			else if (name == "name") {
-				course->setName(value);
+			else if (name == "description") {
+				item->setDescription(value);
 			}
-			else if (name == "meetingTime") {
-				course->setMeetingTime(value);
+			else if (name == "writing") {
+				item->setWriting(value);
 			}
-			else if (name == "meetingDay") {
-				course->setMeetingDay(value);
+			else if (name == "turnon") {
+				item->setTurnonAction(getTextFromNamedChild(childElement, "action"));
+				item->setTurnonPrint(getTextFromNamedChild(childElement, "print"));
 			}
-			else if (name == "number") {
-				course->setNumber(value);
-			}
-			else if (name == "location") {
-				course->setLocation(value);
+			else if (name == "trigger") {
+				item->addTrigger(parseTrigger(childElement));
 			}
 		}
 	}
 
-	return course;
+	return item;
+}
+
+Container* XMLParser::parseContainer(TiXmlElement* element) {
+	// there are two different ways to parse the values contained in nested elements
+	// this function iterates all the elements child nodes nodes, and if an element matches one of the expected names then set the cooresponding attribute
+	// see parseClub for the other method
+	Container* container = new Container();
+
+	// iterate child nodes using IterateChildren in a for loop. This method is a bit more verbose than the while loop used by `parseStudents`, but it is also much easier to read
+	// `parseStudent` shows a cleaner way of using a for loop via FirstChild and NextSibling instead. You could also mix the two methods, using FirstChild and IterateChildren for instance
+	for (TiXmlNode* node = element->IterateChildren(NULL); node != NULL; node = element->IterateChildren(node)) {
+		TiXmlElement* childElement = node->ToElement();
+		if (childElement != NULL) {
+			// ValueStr gets the name of the element type
+			std::string name = childElement->ValueStr();
+			// this method gets the text contained inside the node
+			std::string value = childElement->GetText();
+
+			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
+			if (name == "name") {
+				container->setName(value);
+			}
+			else if (name == "status") {
+				container->setStatus(value);
+			}
+			else if (name == "description") {
+				container->setDescription(value);
+			}
+			else if (name == "accept") {
+				container->addAccept(value);
+			}
+			else if (name == "item") {
+				container->addItem(value);
+			}
+			else if (name == "trigger") {
+				container->addTrigger(parseTrigger(childElement));
+			}
+		}
+	}
+
+	return container;
+}
+
+Creature* XMLParser::parseCreature(TiXmlElement* element) {
+	// there are two different ways to parse the values contained in nested elements
+	// this function iterates all the elements child nodes nodes, and if an element matches one of the expected names then set the cooresponding attribute
+	// see parseClub for the other method
+	Creature* creature = new Creature();
+	for (TiXmlNode* node = element->IterateChildren(NULL); node != NULL; node = element->IterateChildren(node)) {
+		TiXmlElement* childElement = node->ToElement();
+		if (childElement != NULL) {
+			// ValueStr gets the name of the element type
+			std::string name = childElement->ValueStr();
+			// this method gets the text contained inside the node
+			std::string value = childElement->GetText();
+
+			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
+			if (name == "name") {
+				creature->setName(value);
+			}
+			else if (name == "status") {
+				creature->setStatus(value);
+			}
+			else if (name == "vulnerability") {
+				creature->addVulnerability(value);
+			}
+			else if (name == "attack") {
+				creature->setAttack(parseAttack(childElement));
+			}
+			else if (name == "trigger") {
+				creature->addTrigger(parseTrigger(childElement));
+			}
+		}
+	}
+
+	return creature;
+}
+
+Trigger* XMLParser::parseTrigger(TiXmlElement* element) {
+	// there are two different ways to parse the values contained in nested elements
+	// this function iterates all the elements child nodes nodes, and if an element matches one of the expected names then set the cooresponding attribute
+	// see parseClub for the other method
+	Trigger* trigger = new Trigger();
+	for (TiXmlNode* node = element->IterateChildren(NULL); node != NULL; node = element->IterateChildren(node)) {
+		TiXmlElement* childElement = node->ToElement();
+		if (childElement != NULL) {
+			// ValueStr gets the name of the element type
+			std::string name = childElement->ValueStr();
+			// this method gets the text contained inside the node
+			std::string value = childElement->GetText();
+
+			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
+			if (name == "type") {
+				trigger->setType(value);
+			}
+			else if (name == "command") {
+				trigger->setCommand(value);
+			}
+			else if (name == "condition") {
+				trigger->addCondition(parseCondition(childElement));
+			}
+			else if (name == "print") {
+				trigger->addPrint(value);
+			}
+			else if (name == "action") {
+				trigger->addAction(value);
+			}
+		}
+	}
+
+	return trigger;
+}
+
+Attack* XMLParser::parseAttack(TiXmlElement* element) {
+	// there are two different ways to parse the values contained in nested elements
+	// this function iterates all the elements child nodes nodes, and if an element matches one of the expected names then set the cooresponding attribute
+	// see parseClub for the other method
+	Attack* attack = new Attack();
+	for (TiXmlNode* node = element->IterateChildren(NULL); node != NULL; node = element->IterateChildren(node)) {
+		TiXmlElement* childElement = node->ToElement();
+		if (childElement != NULL) {
+			// ValueStr gets the name of the element type
+			std::string name = childElement->ValueStr();
+			// this method gets the text contained inside the node
+			std::string value = childElement->GetText();
+
+			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
+			if (name == "condition") {
+				attack->addCondition(parseCondition(childElement));
+			}
+			else if (name == "print") {
+				attack->addPrint(value);
+			}
+			else if (name == "action") {
+				attack->addAction(value);
+			}
+		}
+	}
+
+	return attack;
+}
+
+Condition* XMLParser::parseCondition(TiXmlElement* element) {
+	// there are two different ways to parse the values contained in nested elements
+	// this function iterates all the elements child nodes nodes, and if an element matches one of the expected names then set the cooresponding attribute
+	// see parseClub for the other method
+	Condition* condition = new Condition();
+	for (TiXmlNode* node = element->IterateChildren(NULL); node != NULL; node = element->IterateChildren(node)) {
+		TiXmlElement* childElement = node->ToElement();
+		if (childElement != NULL) {
+			// ValueStr gets the name of the element type
+			std::string name = childElement->ValueStr();
+			// this method gets the text contained inside the node
+			std::string value = childElement->GetText();
+
+			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
+			if (name == "object") {
+				condition->setObject(value);
+			}
+			else if (name == "status") {
+				condition->setStatus(value);
+			}
+			else if (name == "owner") {
+				condition->setOwner(value);
+			}
+			else if (name == "has") {
+				condition->setHas(value);
+			}
+		}
+	}
+
+	return condition;
 }
 
 /**
@@ -168,31 +341,6 @@ std::string getTextFromNamedChild(TiXmlElement* element, std::string name) {
 		}
 	}
 	return "";
-}
-
-Club* XMLParser::parseClub(TiXmlElement* element) {
-	Club* club = new Club();
-
-	// there are two different ways to parse the attributes in nested elements
-	// this function uses the method to fetch a child element by name, if present
-	club->setName(getTextFromNamedChild(element, "name"));
-	club->setMeetingDay(getTextFromNamedChild(element, "meetingDay"));
-	club->setMeetingTime(getTextFromNamedChild(element, "meetingTime"));
-	club->setLocation(getTextFromNamedChild(element, "location"));
-
-	return club;
-}
-
-Activity* XMLParser::parseActivity(TiXmlElement* element) {
-	// activity has two different subclasses, which are selected based on the type attribue
-	std::string type = element->Attribute("type");
-	if (type == "course") {
-		return parseCourse(element);
-	}
-	if (type == "club") {
-		return parseClub(element);
-	}
-	return NULL;
 }
 
 /**
