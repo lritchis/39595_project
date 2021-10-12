@@ -9,9 +9,12 @@
 class Room {
 public:
     Room::Room();
-    Room::Room(std::string _name, std::string _desc);
+    //Room::Room(std::string _name, std::string _type, std::string _status, std::string _desc); 
+    //stick to default constructors?
 
     virtual void setName(std::string nameToSet);
+    virtual void setType(std::string typeToSet);
+    virtual void setStatus(std::string statusToSet);
     virtual void setDesc(std::string descToSet);
     virtual void setNorth(std::string northRoom);
     virtual void setEast(std::string eastRoom);
@@ -24,14 +27,20 @@ public:
     virtual void addTrigger(Trigger* triggerToAdd);
 
     virtual std::string getName();
+    virtual std::string getType();
+    virtual std::string getStatus();
     virtual std::string getDesc();
     virtual std::string getNorth();
     virtual std::string getEast();
     virtual std::string getSouth();
-    virtual std::string getEast();
+    virtual std::string getWest();
+
+    // !! should we add getters for items, containers, etc.?
 
 private:
     std::string name;
+    std::string status;
+    std::string type;
     std::string desc;
     std::vector<std::string> items;
     std::vector<std::string> containers;
@@ -42,6 +51,7 @@ private:
     std::string east;
     std::string south;
     std::string west;
+
 };
 
 
