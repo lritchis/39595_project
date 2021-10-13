@@ -8,6 +8,7 @@
 class Thing{
 public:
     Thing();
+    Thing(Thing& orig);
     
     virtual void setName(std::string nameToSet);
     virtual void setRoomNum(int roomToSet);
@@ -16,6 +17,7 @@ public:
     virtual std::string getName();
     virtual int getRoomNum();
     virtual std::string getStatus();
+    virtual std::vector<Trigger> getTriggers();
 
     virtual void addTrigger(Trigger triggerToAdd);
 
