@@ -8,7 +8,7 @@
 
 class Room {
 public:
-    Room::Room();
+    Room();
 
     virtual void setName(std::string nameToSet);
     virtual void setType(std::string typeToSet);

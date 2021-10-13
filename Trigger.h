@@ -7,7 +7,7 @@
 
 class Trigger {
 public:
-    Trigger::Trigger();
+    Trigger();
 
     virtual void setType(std::string typeToSet);
     virtual void setCommand(std::string commandToSet);
