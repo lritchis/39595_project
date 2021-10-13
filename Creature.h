@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "Thing.h"
+#include "Attack.h"
 
 class Creature : public Thing {
 public:
@@ -11,11 +12,14 @@ public:
     Creature(Creature& orig);
 
     virtual void addVulnerability(std::string vulnToAdd);
+    virtual void setAttack(Attack attackToSet);
 
     virtual std::vector<std::string> getVuln();
+    virtual Attack getAttack();
 
 protected:
     std::vector<std::string> vulnerability;
+    Attack attack;
 };
 
 #endif

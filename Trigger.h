@@ -15,13 +15,11 @@ public:
     virtual void addPrint(std::string printToAdd);
     virtual void addAction(std::string actionToAdd);
 
-/*
     virtual std::string getType();
     virtual std::string getCommand();
-    virtual Condition getCondition();
-    virtual std::string getPrint();
-    virtual std::string getAction();
-*/
+    virtual std::vector<Condition> getConditions();
+    virtual std::vector<std::string> getPrints();
+    virtual std::vector<std::string> getActions();
 
 private:
     std::string type;

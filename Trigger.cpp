@@ -28,7 +28,7 @@ void Trigger::addAction(std::string actionToAdd) {
     actions.push_back(actionToAdd);
     std::cout << "Adding action to Trigger: " << actionToAdd << std::endl;
 }
-/*
+
 std::string Trigger::getType() {
     return type;
 }
@@ -37,15 +37,14 @@ std::string Trigger::getCommand() {
     return command;
 }
 
-Condition Trigger::getCondition() {
-    return condition;
+std::vector<Condition> Trigger::getConditions() {
+    return conditions;
 }
 
-std::string Trigger::getPrint() {
-    return print;
+std::vector<std::string> Trigger::getPrints() {
+    return prints;
 }
 
-std::string Trigger::getAction() {
-    return action;
+std::vector<std::string> Trigger::getActions() {
+    return actions;
 }
-*/
