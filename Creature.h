@@ -3,12 +3,13 @@
 
 #include <vector>
 #include <string>
+#include "Thing.h"
 
 class Creature : public Thing {
 public:
     Creature();
 
-    void addVulnerability;
+    virtual void addVulnerability(std::string vulnToAdd);
 
 protected:
     std::vector<std::string> vulnerability;
