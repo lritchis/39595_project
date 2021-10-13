@@ -2,14 +2,16 @@
 #include "Thing.h"
 
 Item::Item() : Thing () {
-
+    std::cout << "Item constructor with name " << name << std::endl;
 }
 
 void Item::setDescription(std::string descToSet) {
+    std::cout << "Set Item description to " << descToSet << std::endl;
     desc = descToSet;
 }
 
 void Item::setWriting(std::string writingToSet) {
+    std::cout << "Set Item writing to " << writingToSet << std::endl;
     writing = writingToSet;
 }
 
