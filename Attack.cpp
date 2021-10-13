@@ -4,6 +4,12 @@ Attack::Attack() {
     std::cout << "Creating an Attack" << std::endl;
 }
 
+Attack::Attack(Attack& orig) {
+    conditions = orig.conditions;
+    prints = orig.prints;
+    actions = orig.actions;
+}
+
 void Attack::addCondition(Condition conditionToAdd) {
     conditions.push_back(conditionToAdd);
     std::cout << "Adding condition to Attack" << std::endl;
