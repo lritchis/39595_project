@@ -4,12 +4,9 @@ Thing::Thing() : name(""), roomNum(-1), status("") {
 
 }
 
-Thing::Thing(std::string _name, int _roomNum, std::string _status) : name(_name), roomNum(_roomNum), status(_status) {
-
-}
-
 void Thing::setName(std::string nameToSet) {
     name = nameToSet;
+    std::cout << "Setting name to " << nameToSet << std::endl;
 }
 
 void Thing::setRoomNum(int roomToSet) {
@@ -18,6 +15,7 @@ void Thing::setRoomNum(int roomToSet) {
 
 void Thing::setStatus(std::string statusToSet) {
     status = statusToSet;
+    std::cout << "Setting status to " << statusToSet << std::endl;
 }
 
 std::string Thing::getName() {
@@ -32,6 +30,7 @@ std::string Thing::getStatus() {
     return status;
 }
 
-void Thing::addTrigger(Trigger* triggerToAdd) {
+void Thing::addTrigger(Trigger triggerToAdd) {
     triggers.push_back(triggerToAdd);
+    std::cout << "Adding a trigger" << std::endl;
 }
