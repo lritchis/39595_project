@@ -2,6 +2,7 @@
 #define Trigger_H_
 #include <iostream>
 #include "Condition.h"
+#include "string.h"
 
 class Trigger {
 public:
@@ -11,15 +12,21 @@ public:
     virtual void setType(std::string typeToSet);
     virtual void setCommand(std::string commandToSet);
     virtual void setCondition(Condition* conditionToSet);
+    virtual void setPrint(std::string printToSet);
+    virtual void setAction(std::string actionToSet);
 
     virtual std::string getType();
     virtual std::string getCommand();
-    virtual Condition getCondition();
+    virtual Condition* getCondition();
+    virtual std::string getPrint();
+    virtual std::string getAction();
 
 private:
     std::string type;
     std::string command;
-    Condition* condition;
+    std::vector<Condition*> condition;
+    std::string print;
+    std::string action;
 };
 
 #endif

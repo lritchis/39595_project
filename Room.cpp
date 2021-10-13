@@ -20,7 +20,7 @@ void Room::setStatus(std::string statusToSet) {
     status = statusToSet;
 }
 
-void Room::setDesc(std::string descToSet) {
+void Room::setDescription(std::string descToSet) {
     desc = descToSet;
 }
 
@@ -68,7 +68,7 @@ std::string Room::getStatus() {
     return status;
 }
 
-std::string Room::getDesc() {
+std::string Room::getDescription() {
     return desc;
 }
 

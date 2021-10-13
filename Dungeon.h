@@ -1,7 +1,7 @@
 #ifndef Dungeon_H_
 #define Dungeon_H_
 
-#include <string>
+#include "string.h"
 #include <vector>
 #include "Room.h"
 #include "Item.h"
@@ -15,6 +15,8 @@ public:
     virtual void addItem(Item item);
     virtual void addCreature(Creature creature);
     virtual void addContainer(Container container);
+
+    // will need getters
 private:
     std::vector<Room> rooms;
     std::vector<Creature> creatures;

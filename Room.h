@@ -15,7 +15,7 @@ public:
     virtual void setName(std::string nameToSet);
     virtual void setType(std::string typeToSet);
     virtual void setStatus(std::string statusToSet);
-    virtual void setDesc(std::string descToSet);
+    virtual void setDescription(std::string descToSet);
     virtual void setNorth(std::string northRoom);
     virtual void setEast(std::string eastRoom);
     virtual void setSouth(std::string southRoom);
@@ -29,7 +29,7 @@ public:
     virtual std::string getName();
     virtual std::string getType();
     virtual std::string getStatus();
-    virtual std::string getDesc();
+    virtual std::string getDescription();
     virtual std::string getNorth();
     virtual std::string getEast();
     virtual std::string getSouth();

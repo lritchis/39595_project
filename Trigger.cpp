@@ -20,10 +20,31 @@ void Trigger::setCondition(Condition* conditionToSet) {
     condition = conditionToSet;
 }
 
+void Trigger::setPrint(std::string printToSet) {
+    print = printToSet;
+}
+
+void Trigger::setAction(std::string actionToSet) {
+    action = actionToSet;
+}
+
 std::string Trigger::getType() {
     return type;
 }
 
 std::string Trigger::getCommand() {
     return command;
+}
+
+// need to see if using Condition* is the way to do this or if it causes issues
+Condition* Trigger::getCondition() {
+    return condition;
+}
+
+std::string Trigger::getPrint() {
+    return print;
+}
+
+std::string Trigger::getAction() {
+    return action;
 }

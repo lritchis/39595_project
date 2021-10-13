@@ -1,5 +1,9 @@
 #include "Thing.h"
 
+Thing::Thing() : name(""), roomNum(-1), status("") {
+
+}
+
 Thing::Thing(std::string _name, int _roomNum, std::string _status) : name(_name), roomNum(_roomNum), status(_status) {
 
 }
@@ -29,5 +33,5 @@ std::string Thing::getStatus() {
 }
 
 void Thing::addTrigger(Trigger* triggerToAdd) {
-    triggers.insert(triggerToAdd);
+    triggers.push_back(triggerToAdd);
 }
