@@ -7,18 +7,22 @@
 class Condition {
 public:
     Condition::Condition();
-    Condition::Condition(bool _has, std::string _objName);
 
-    virtual void setHas(bool hasToSet);
-    virtual void setObjName(std::string nameToSet);
+    virtual void setHas(std::string hasToSet);
+    virtual void setObject(std::string objectToSet);
+    virtual void setStatus(std::string statusToSet);
+    virtual void setOwner(std::string ownerToSet);
     
-
+    /*
     virtual bool getHas();
     virtual std::string getObjName();
+    */
     
 protected:
-    bool has;
-    std::string objName;
+    std::string has;
+    std::string object;
+    std::string status;
+    std::string owner;
 };
 
 #endif 

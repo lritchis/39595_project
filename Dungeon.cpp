@@ -15,6 +15,7 @@ void Dungeon::addRoom(Room room) {
 void Dungeon::addItem(Item item) {
     items.push_back(item);
     std::cout << "Adding item " << item.getName() << " to dungeon" << std::endl;
+}
 
 void Dungeon::addCreature(Creature creature) {
     creatures.push_back(creature);

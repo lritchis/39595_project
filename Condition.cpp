@@ -1,21 +1,30 @@
 #include "Condition.h"
 
-Condition::Condition() : has(false), objName("") {
-
+Condition::Condition() : has(""), object(""), status(""), owner("") {
+    std::cout << "Creating a Condition" << std::endl;
 }
 
-Condition::Condition(bool _has, std::string _objName) : has(_has), objName(_objName) {
-
-}
-
-void Condition::setHas(bool hasToSet) {
+void Condition::setHas(std::string hasToSet) {
     has = hasToSet;
+    std::cout << "Setting condition 'has' to " << hasToSet << std::endl;
 }
 
-void Condition::setObjName(std::string nameToSet) {
-    objName = nameToSet;
+void Condition::setObject(std::string objectToSet) {
+    object = objectToSet;
+    std::cout << "Setting condition object to " << objectToSet << std::endl;
 }
 
+void Condition::setStatus(std::string statusToSet) {
+    status = statusToSet;
+    std::cout << "Setting condition status to " << statusToSet << std::endl;
+}
+
+void Condition::setOwner(std::string ownerToSet) {
+    owner = ownerToSet;
+    std::cout << "Setting condition owner to " << ownerToSet << std::endl;
+}
+
+/*
 bool Condition::getHas() {
     return has;
 }
@@ -23,4 +32,4 @@ bool Condition::getHas() {
 std::string Condition::getObjName() {
     return objName;
 }
-
+*/

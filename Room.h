@@ -9,8 +9,6 @@
 class Room {
 public:
     Room::Room();
-    //Room::Room(std::string _name, std::string _type, std::string _status, std::string _desc); 
-    //stick to default constructors?
 
     virtual void setName(std::string nameToSet);
     virtual void setType(std::string typeToSet);
@@ -24,7 +22,7 @@ public:
     virtual void addItem(std::string itemToAdd);
     virtual void addContainer(std::string containerToAdd);
     virtual void addCreature(std::string creatureToAdd);
-    virtual void addTrigger(Trigger* triggerToAdd);
+    virtual void addTrigger(Trigger triggerToAdd);
 
     virtual std::string getName();
     virtual std::string getType();
