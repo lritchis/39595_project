@@ -9,6 +9,7 @@
 class Room {
 public:
     Room();
+    Room(Room& orig);
 
     virtual void setName(std::string nameToSet);
     virtual void setType(std::string typeToSet);
@@ -32,6 +33,11 @@ public:
     virtual std::string getEast();
     virtual std::string getSouth();
     virtual std::string getWest();
+
+    virtual std::vector<std::string> getItems();
+    virtual std::vector<std::string> getContainers();
+    virtual std::vector<std::string> getCreatures();
+    virtual std::vector<Trigger> getTriggers();
 
     // !! should we add getters for items, containers, etc.?
 

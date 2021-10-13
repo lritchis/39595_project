@@ -4,6 +4,21 @@ Room::Room() : name(""), status(""), type("regular"),  desc(""), north("none"), 
     std::cout << "Creating a Room" << std::endl;
 }
 
+Room::Room(Room& orig) {
+    name = orig.getName();
+    type = orig.getType();
+    status = orig.getStatus();
+    desc = orig.getDescription();
+    north = orig.getNorth();
+    east = orig.getEast();
+    south = orig.getSouth();
+    west = orig.getWest();
+    items = orig.getItems();
+    containers = orig.getContainers();
+    creatures = orig.getCreatures();
+    triggers = orig.getTriggers();
+}
+
 void Room::setName(std::string nameToSet) {
     name = nameToSet;
     std::cout << "Setting room name to " << nameToSet << std::endl;
@@ -94,4 +109,20 @@ std::string Room::getSouth() {
 
 std::string Room::getWest() {
     return west;
+}
+
+std::vector<std::string> Room::getItems() {
+    return items;
+}
+
+std::vector<std::string> Room::getContainers() {
+    return containers;
+}
+
+std::vector<std::string> Room::getCreatures() {
+    return creatures;
+}
+
+std::vector <Trigger> Room::getTriggers() {
+    return triggers;
 }
