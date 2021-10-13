@@ -1,7 +1,7 @@
 #include "Creature.h"
 
 Creature::Creature() : Thing() {
-
+    std::cout << "Creature constructor of name " << name << std::endl;
 }
 
 void Creature::addVulnerability(std::string vulnToAdd) {
