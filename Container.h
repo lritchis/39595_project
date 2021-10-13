@@ -9,13 +9,16 @@ public:
     Container();
     Container(Container& orig);
 
+    virtual void setDescription(std::string descToSet);
     virtual void addAccept(std::string acceptToAdd);
     virtual void addItem(std::string itemToAdd);
 
+    virtual std::string getDescription();
     virtual std::vector<std::string> getAccepts();
     virtual std::vector<std::string> getItems();
 
 protected:
+    std::string desc;
     std::vector<std::string> accept;
     std::vector<std::string> items;
 
