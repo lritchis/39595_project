@@ -4,6 +4,13 @@ Condition::Condition() : has(""), object(""), status(""), owner("") {
     std::cout << "Creating a Condition" << std::endl;
 }
 
+Condition::Condition(Condition& orig) {
+    has = orig.has;
+    object = orig.object;
+    status = orig.status;
+    owner = orig.owner;
+}
+
 void Condition::setHas(std::string hasToSet) {
     has = hasToSet;
     std::cout << "Setting condition 'has' to " << hasToSet << std::endl;

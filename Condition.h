@@ -7,6 +7,7 @@
 class Condition {
 public:
     Condition();
+    Condition(Condition& orig);
 
     virtual void setHas(std::string hasToSet);
     virtual void setObject(std::string objectToSet);
