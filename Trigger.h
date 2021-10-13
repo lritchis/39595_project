@@ -7,26 +7,26 @@
 class Trigger {
 public:
     Trigger::Trigger();
-    Trigger::Trigger(std::string _type, std::string _command, Condition* _condition);
+    Trigger::Trigger(std::string _type, std::string _command, Condition _condition);
 
     virtual void setType(std::string typeToSet);
     virtual void setCommand(std::string commandToSet);
-    virtual void setCondition(Condition* conditionToSet);
-    virtual void setPrint(std::string printToSet);
-    virtual void setAction(std::string actionToSet);
+    virtual void addCondition(Condition conditionToSet);
+    virtual void addPrint(std::string printToSet);
+    virtual void addAction(std::string actionToSet);
 
     virtual std::string getType();
     virtual std::string getCommand();
-    virtual Condition* getCondition();
+    virtual Condition getCondition();
     virtual std::string getPrint();
     virtual std::string getAction();
 
 private:
     std::string type;
     std::string command;
-    std::vector<Condition*> condition;
-    std::string print;
-    std::string action;
+    std::vector<Condition> conditions;
+    std::vector<std::string> prints;
+    std::vector<std::string> actions;
 };
 
 #endif

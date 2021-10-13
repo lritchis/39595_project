@@ -2,7 +2,7 @@
 #define Condition_H_
 
 #include <iostream>
-#include "string.h"
+#include <string>
 
 class Condition {
 public:
