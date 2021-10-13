@@ -2,7 +2,7 @@
 #define Trigger_H_
 #include <iostream>
 #include "Condition.h"
-#include "string.h"
+#include <string>
 
 class Trigger {
 public:

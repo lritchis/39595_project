@@ -2,7 +2,7 @@
 #define Item_H_
 
 #include <iostream>
-#include <string.h>
+#include <string>
 
 class Item : public Thing {
 public:

@@ -1,7 +1,7 @@
 #ifndef Room_H_
 #define Room_H_
 
-#include "string.h"
+#include <string>
 #include <vector>
 #include <iostream>
 #include "Trigger.h"

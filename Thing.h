@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "Trigger.h"
+#include <string>
 
 class Thing{
 public:

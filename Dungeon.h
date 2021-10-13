@@ -1,7 +1,7 @@
 #ifndef Dungeon_H_
 #define Dungeon_H_
 
-#include "string.h"
+#include <string>
 #include <vector>
 #include "Room.h"
 #include "Item.h"

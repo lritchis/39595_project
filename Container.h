@@ -1,7 +1,7 @@
 #ifndef Container_H_
 #define Container_H_
 
-#include <string.h>
+#include <string>
 #include <vector>
 #include "Thing.h"
 class Container : public Thing {

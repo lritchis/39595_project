@@ -2,7 +2,7 @@
 #define Creature_H_
 
 #include <vector>
-#include "string.h"
+#include <string>
 
 class Creature : public Thing {
 public:

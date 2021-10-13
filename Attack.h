@@ -1,6 +1,7 @@
 #ifndef Attack_H_
 #define Attack_H_
 #include "Condition.h"
+#include <string>
 
 class Attack {
 public:
