@@ -5,9 +5,9 @@ Attack::Attack() {
 }
 
 Attack::Attack(Attack& orig) {
-    conditions = orig.conditions;
-    prints = orig.prints;
-    actions = orig.actions;
+    conditions = orig.getConditions();
+    prints = orig.getPrints();
+    actions = orig.getActions();
 }
 
 void Attack::addCondition(Condition conditionToAdd) {
@@ -23,4 +23,16 @@ void Attack::addPrint(std::string printToAdd) {
 void Attack::addAction(std::string actionToAdd) {
     actions.push_back(actionToAdd);
     std::cout << "Adding action to Attack: " << actionToAdd << std::endl;
+}
+
+std::vector<Condition> Attack::getConditions() {
+    return conditions;
+}
+
+std::vector<std::string> Attack::getPrints() {
+    return prints;
+}
+
+std::vector<std::string> Attack::getActions() {
+    return actions;
 }

@@ -14,6 +14,10 @@ public:
     virtual void addPrint(std::string printToAdd);
     virtual void addAction(std::string actionToAdd);
 
+    virtual std::vector<Condition> getConditions();
+    virtual std::vector<std::string> getPrints();
+    virtual std::vector<std::string> getActions();
+
 private:
     std::vector<Condition> conditions;
     std::vector<std::string> prints;

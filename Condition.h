@@ -14,10 +14,12 @@ public:
     virtual void setStatus(std::string statusToSet);
     virtual void setOwner(std::string ownerToSet);
     
-    /*
-    virtual bool getHas();
-    virtual std::string getObjName();
-    */
+    
+    virtual std::string getHas();
+    virtual std::string getObject();
+    virtual std::string getStatus();
+    virtual std::string getOwner();
+    
     
 protected:
     std::string has;
