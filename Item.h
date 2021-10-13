@@ -7,6 +7,7 @@
 class Item : public Thing {
 public:
     Item();
+    Item(Item& orig);
     
     virtual void setDescription(std::string descToSet);
     virtual void setWriting(std::string writingToSet);

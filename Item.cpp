@@ -5,6 +5,13 @@ Item::Item() : Thing () {
     std::cout << "Creating an Item" << std::endl;
 }
 
+Item::Item(Item& orig) : Thing(orig) {
+    desc = orig.getDescription();
+    writing = orig.getWriting();
+    turnonAction = orig.getTurnonAction();
+    turnonPrint = orig.getTurnonPrint();
+}
+
 void Item::setDescription(std::string descToSet) {
     std::cout << "Setting item description to " << descToSet << std::endl;
     desc = descToSet;
