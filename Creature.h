@@ -8,8 +8,11 @@
 class Creature : public Thing {
 public:
     Creature();
+    Creature(Creature& orig);
 
     virtual void addVulnerability(std::string vulnToAdd);
+
+    virtual std::vector<std::string> getVuln();
 
 protected:
     std::vector<std::string> vulnerability;
