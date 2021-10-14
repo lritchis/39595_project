@@ -10,6 +10,7 @@ class Room {
 public:
     Room();
     Room(const Room& orig);
+    virtual ~Room();
 
     virtual void setName(std::string nameToSet);
     virtual void setType(std::string typeToSet);

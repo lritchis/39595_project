@@ -9,6 +9,10 @@ Container::Container(const Container& orig) : Thing(orig) {
     items = orig.getItems();
 }
 
+Container::~Container() {
+    
+}
+
 void Container::setDescription(std::string descToSet) {
     std::cout << "Setting container description to " << descToSet << std::endl;
     desc = descToSet;

@@ -10,6 +10,10 @@ Attack::Attack(const Attack& orig) {
     actions = orig.getActions();
 }
 
+Attack::~Attack() {
+    
+}
+
 void Attack::addCondition(Condition conditionToAdd) {
     conditions.push_back(conditionToAdd);
     std::cout << "Adding condition to Attack" << std::endl;

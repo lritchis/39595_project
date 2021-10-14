@@ -11,6 +11,10 @@ Condition::Condition(const Condition& orig) {
     owner = orig.getOwner();
 }
 
+Condition::~Condition() {
+    
+}
+
 void Condition::setHas(std::string hasToSet) {
     has = hasToSet;
     std::cout << "Setting condition 'has' to " << hasToSet << std::endl;

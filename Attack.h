@@ -9,6 +9,7 @@ class Attack {
 public:
     Attack();
     Attack(const Attack& orig);
+    virtual ~Attack();
 
     virtual void addCondition(Condition conditionToAdd);
     virtual void addPrint(std::string printToAdd);
