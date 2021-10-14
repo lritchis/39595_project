@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "Thing.h"
 
 class Item : public Thing {
 public:
