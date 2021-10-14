@@ -4,7 +4,7 @@ Creature::Creature() : Thing() {
     std::cout << "Creating a creature" << std::endl;
 }
 
-Creature::Creature(Creature& orig) : Thing(orig) {
+Creature::Creature(const Creature& orig) : Thing(orig) {
     vulnerability = orig.vulnerability;
 }
 
@@ -18,10 +18,10 @@ void Creature::setAttack(Attack attackToSet) {
     std::cout << "Setting the attack of the creature" << std::endl;
 }
 
-std::vector<std::string> Creature::getVuln() {
+std::vector<std::string> Creature::getVuln() const {
     return vulnerability;
 }
 
-Attack Creature::getAttack() {
+Attack Creature::getAttack() const {
     return attack;
 }

@@ -4,7 +4,7 @@ Attack::Attack() {
     std::cout << "Creating an Attack" << std::endl;
 }
 
-Attack::Attack(Attack& orig) {
+Attack::Attack(const Attack& orig) {
     conditions = orig.getConditions();
     prints = orig.getPrints();
     actions = orig.getActions();
@@ -25,14 +25,14 @@ void Attack::addAction(std::string actionToAdd) {
     std::cout << "Adding action to Attack: " << actionToAdd << std::endl;
 }
 
-std::vector<Condition> Attack::getConditions() {
+const std::vector<Condition> Attack::getConditions() {
     return conditions;
 }
 
-std::vector<std::string> Attack::getPrints() {
+const std::vector<std::string> Attack::getPrints() {
     return prints;
 }
 
-std::vector<std::string> Attack::getActions() {
+const std::vector<std::string> Attack::getActions() {
     return actions;
 }

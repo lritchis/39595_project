@@ -8,16 +8,16 @@
 class Thing{
 public:
     Thing();
-    Thing(Thing& orig);
+    Thing(const Thing& orig);
     
     virtual void setName(std::string nameToSet);
     virtual void setRoomNum(int roomToSet);
     virtual void setStatus(std::string statusToSet);
 
-    virtual std::string getName();
-    virtual int getRoomNum();
-    virtual std::string getStatus();
-    virtual std::vector<Trigger> getTriggers();
+    virtual std::string getName() const;
+    virtual int getRoomNum() const;
+    virtual std::string getStatus() const;
+    virtual std::vector<Trigger> getTriggers() const;
 
     virtual void addTrigger(Trigger triggerToAdd);
 

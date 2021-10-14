@@ -7,7 +7,7 @@ Dungeon::Dungeon() {
     std::cout << "Creating Dungeon Map" << std::endl;
 }
 
-Dungeon::Dungeon(Dungeon& orig) {
+Dungeon::Dungeon(const Dungeon& orig) {
     rooms = orig.getRooms();
     creatures = orig.getCreatures();
     items = orig.getItems();
@@ -34,18 +34,18 @@ void Dungeon::addContainer(Container container) {
     std::cout << "Adding container " << container.getName() << " to dungeon" << std::endl;
 }
 
-std::vector<Room> Dungeon::getRooms() {
+std::vector<Room> Dungeon::getRooms() const {
     return rooms;
 }
 
-std::vector<Creature> Dungeon::getCreatures() {
+std::vector<Creature> Dungeon::getCreatures() const {
     return creatures;
 }
 
-std::vector<Item> Dungeon::getItems() {
+std::vector<Item> Dungeon::getItems() const {
     return items;
 }
 
-std::vector<Container> Dungeon::getContainers() {
+std::vector<Container> Dungeon::getContainers() const {
     return containers;
 }

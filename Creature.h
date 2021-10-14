@@ -9,13 +9,13 @@
 class Creature : public Thing {
 public:
     Creature();
-    Creature(Creature& orig);
+    Creature(const Creature& orig);
 
     virtual void addVulnerability(std::string vulnToAdd);
     virtual void setAttack(Attack attackToSet);
 
-    virtual std::vector<std::string> getVuln();
-    virtual Attack getAttack();
+    virtual std::vector<std::string> getVuln() const;
+    virtual Attack getAttack() const;
 
 protected:
     std::vector<std::string> vulnerability;

@@ -11,16 +11,16 @@
 class Dungeon {
 public:
     Dungeon();
-    Dungeon(Dungeon& orig);
+    Dungeon(const Dungeon& orig);
     virtual void addRoom(Room room);
     virtual void addItem(Item item);
     virtual void addCreature(Creature creature);
     virtual void addContainer(Container container);
 
-    std::vector<Room> getRooms();
-    std::vector<Creature> getCreatures();
-    std::vector<Item> getItems();
-    std::vector<Container>getContainers();
+    std::vector<Room> getRooms() const;
+    std::vector<Creature> getCreatures() const;
+    std::vector<Item> getItems() const;
+    std::vector<Container>getContainers() const;
 
 private:
     std::vector<Room> rooms;

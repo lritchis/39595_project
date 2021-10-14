@@ -4,7 +4,7 @@ Condition::Condition() : has(""), object(""), status(""), owner("") {
     std::cout << "Creating a Condition" << std::endl;
 }
 
-Condition::Condition(Condition& orig) {
+Condition::Condition(const Condition& orig) {
     has = orig.getHas();
     object = orig.getObject();
     status = orig.getStatus();
@@ -32,19 +32,19 @@ void Condition::setOwner(std::string ownerToSet) {
 }
 
 
-std::string Condition::getHas() {
+std::string Condition::getHas() const {
     return has;
 }
 
-std::string Condition::getObject() {
+std::string Condition::getObject() const {
     return object;
 }
 
-std::string Condition::getStatus() {
+std::string Condition::getStatus() const {
     return status;
 }
 
-std::string Condition::getOwner() {
+std::string Condition::getOwner() const {
     return owner;
 }
 

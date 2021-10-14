@@ -8,6 +8,7 @@
 class Trigger {
 public:
     Trigger();
+    Trigger(const Trigger& orig);
 
     virtual void setType(std::string typeToSet);
     virtual void setCommand(std::string commandToSet);
@@ -15,11 +16,11 @@ public:
     virtual void addPrint(std::string printToAdd);
     virtual void addAction(std::string actionToAdd);
 
-    virtual std::string getType();
-    virtual std::string getCommand();
-    virtual std::vector<Condition> getConditions();
-    virtual std::vector<std::string> getPrints();
-    virtual std::vector<std::string> getActions();
+    virtual std::string getType() const;
+    virtual std::string getCommand() const;
+    virtual std::vector<Condition> getConditions() const;
+    virtual std::vector<std::string> getPrints() const;
+    virtual std::vector<std::string> getActions() const;
 
 private:
     std::string type;

@@ -4,11 +4,11 @@ Thing::Thing() : name(""), roomNum(-1), status("") {
 
 }
 
-Thing::Thing(Thing& orig) {
+Thing::Thing(const Thing& orig) {
     name = orig.getName();
     roomNum = orig.getRoomNum();
     status = orig.getStatus();
-    trigger = orig.getTriggers();
+    triggers = orig.getTriggers();
 }
 
 void Thing::setName(std::string nameToSet) {
@@ -25,19 +25,19 @@ void Thing::setStatus(std::string statusToSet) {
     std::cout << "Setting status to " << statusToSet << std::endl;
 }
 
-std::string Thing::getName() {
+std::string Thing::getName() const {
     return name;
 }
 
-int Thing::getRoomNum() {
+int Thing::getRoomNum() const {
     return roomNum;
 }
 
-std::string Thing::getStatus() {
+std::string Thing::getStatus() const {
     return status;
 }
 
-std::vector<Trigger> Thing::getTriggers() {
+std::vector<Trigger> Thing::getTriggers() const {
     return triggers;
 }
 

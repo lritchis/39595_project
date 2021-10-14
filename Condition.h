@@ -7,7 +7,7 @@
 class Condition {
 public:
     Condition();
-    Condition(Condition& orig);
+    Condition(const Condition& orig);
 
     virtual void setHas(std::string hasToSet);
     virtual void setObject(std::string objectToSet);
@@ -15,10 +15,10 @@ public:
     virtual void setOwner(std::string ownerToSet);
     
     
-    virtual std::string getHas();
-    virtual std::string getObject();
-    virtual std::string getStatus();
-    virtual std::string getOwner();
+    virtual std::string getHas() const;
+    virtual std::string getObject() const;
+    virtual std::string getStatus() const;
+    virtual std::string getOwner() const;
     
     
 protected:

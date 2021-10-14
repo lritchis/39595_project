@@ -4,7 +4,7 @@ Container::Container() : Thing() {
     std::cout << "Creating a container" << std::endl;
 }
 
-Container::Container(Container& orig) : Thing(orig) {
+Container::Container(const Container& orig) : Thing(orig) {
     accept = orig.getAccepts();
     items = orig.getItems();
 }
@@ -24,15 +24,15 @@ void Container::addAccept(std::string acceptToAdd) {
     accept.push_back(acceptToAdd);
 }
 
-std::string Container::getDescription() {
+std::string Container::getDescription() const {
     return desc;
 }
 
-std::vector<std::string> Container::getAccepts() {
+std::vector<std::string> Container::getAccepts() const {
     return accept;
 }
 
-std::vector<std::string> Container::getItems() {
+std::vector<std::string> Container::getItems() const {
     return items;
 }
 

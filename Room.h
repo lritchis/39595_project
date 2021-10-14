@@ -9,7 +9,7 @@
 class Room {
 public:
     Room();
-    Room(Room& orig);
+    Room(const Room& orig);
 
     virtual void setName(std::string nameToSet);
     virtual void setType(std::string typeToSet);
@@ -25,19 +25,19 @@ public:
     virtual void addCreature(std::string creatureToAdd);
     virtual void addTrigger(Trigger triggerToAdd);
 
-    virtual std::string getName();
-    virtual std::string getType();
-    virtual std::string getStatus();
-    virtual std::string getDescription();
-    virtual std::string getNorth();
-    virtual std::string getEast();
-    virtual std::string getSouth();
-    virtual std::string getWest();
+    virtual std::string getName() const;
+    virtual std::string getType() const;
+    virtual std::string getStatus() const;
+    virtual std::string getDescription() const;
+    virtual std::string getNorth() const;
+    virtual std::string getEast() const;
+    virtual std::string getSouth() const;
+    virtual std::string getWest() const;
 
-    virtual std::vector<std::string> getItems();
-    virtual std::vector<std::string> getContainers();
-    virtual std::vector<std::string> getCreatures();
-    virtual std::vector<Trigger> getTriggers();
+    virtual std::vector<std::string> getItems() const;
+    virtual std::vector<std::string> getContainers() const;
+    virtual std::vector<std::string> getCreatures() const;
+    virtual std::vector<Trigger> getTriggers() const;
 
     // !! should we add getters for items, containers, etc.?
 

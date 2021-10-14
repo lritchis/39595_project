@@ -5,7 +5,7 @@ Item::Item() : Thing () {
     std::cout << "Creating an Item" << std::endl;
 }
 
-Item::Item(Item& orig) : Thing(orig) {
+Item::Item(const Item& orig) : Thing(orig) {
     desc = orig.getDescription();
     writing = orig.getWriting();
     turnonAction = orig.getTurnonAction();
@@ -32,18 +32,18 @@ void Item::setTurnonPrint(std::string turnonPrintToSet) {
     turnonPrint = turnonPrintToSet;
 }
 
-std::string Item::getDescription() {
+std::string Item::getDescription() const {
     return desc;
 }
 
-std::string Item::getWriting() {
+std::string Item::getWriting() const {
     return writing;
 }
 
-std::string Item::getTurnonAction() {
+std::string Item::getTurnonAction() const {
     return turnonAction;
 }
 
-std::string Item::getTurnonPrint() {
+std::string Item::getTurnonPrint() const {
     return turnonPrint;
 }

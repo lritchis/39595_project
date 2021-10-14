@@ -1,3 +1,4 @@
+#define TIXML_USE_STL
 #include <string>
 #include <vector>
 #include <iostream>

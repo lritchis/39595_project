@@ -8,15 +8,15 @@
 class Attack {
 public:
     Attack();
-    Attack(Attack& orig);
+    Attack(const Attack& orig);
 
     virtual void addCondition(Condition conditionToAdd);
     virtual void addPrint(std::string printToAdd);
     virtual void addAction(std::string actionToAdd);
 
-    virtual std::vector<Condition> getConditions();
-    virtual std::vector<std::string> getPrints();
-    virtual std::vector<std::string> getActions();
+    virtual std::vector<Condition> getConditions() const;
+    virtual std::vector<std::string> getPrints() const;
+    virtual std::vector<std::string> getActions() const;
 
 private:
     std::vector<Condition> conditions;

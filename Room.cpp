@@ -4,7 +4,7 @@ Room::Room() : name(""), status(""), type("regular"),  desc(""), north("none"), 
     std::cout << "Creating a Room" << std::endl;
 }
 
-Room::Room(Room& orig) {
+Room::Room(const Room& orig) {
     name = orig.getName();
     type = orig.getType();
     status = orig.getStatus();
@@ -79,50 +79,50 @@ void Room::addTrigger(Trigger triggerToAdd) {
     std::cout << "Adding trigger to Room" << std::endl;
 }
 
-std::string Room::getName() {
+std::string Room::getName() const {
     return name;
 }
 
-std::string Room::getType() {
+std::string Room::getType() const {
     return type;
 }
 
-std::string Room::getStatus() {
+std::string Room::getStatus() const {
     return status;
 }
 
-std::string Room::getDescription() {
+std::string Room::getDescription() const {
     return desc;
 }
 
-std::string Room::getNorth() {
+std::string Room::getNorth() const {
     return north;
 }
 
-std::string Room::getEast() {
+std::string Room::getEast() const {
     return east;
 }
 
-std::string Room::getSouth() {
+std::string Room::getSouth() const {
     return south;
 }
 
-std::string Room::getWest() {
+std::string Room::getWest() const {
     return west;
 }
 
-std::vector<std::string> Room::getItems() {
+std::vector<std::string> Room::getItems() const {
     return items;
 }
 
-std::vector<std::string> Room::getContainers() {
+std::vector<std::string> Room::getContainers() const {
     return containers;
 }
 
-std::vector<std::string> Room::getCreatures() {
+std::vector<std::string> Room::getCreatures() const {
     return creatures;
 }
 
-std::vector <Trigger> Room::getTriggers() {
+std::vector <Trigger> Room::getTriggers() const {
     return triggers;
 }

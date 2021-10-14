@@ -7,15 +7,15 @@
 class Container : public Thing {
 public:
     Container();
-    Container(Container& orig);
+    Container(const Container& orig);
 
     virtual void setDescription(std::string descToSet);
     virtual void addAccept(std::string acceptToAdd);
     virtual void addItem(std::string itemToAdd);
 
-    virtual std::string getDescription();
-    virtual std::vector<std::string> getAccepts();
-    virtual std::vector<std::string> getItems();
+    virtual std::string getDescription() const;
+    virtual std::vector<std::string> getAccepts() const;
+    virtual std::vector<std::string> getItems() const;
 
 protected:
     std::string desc;
