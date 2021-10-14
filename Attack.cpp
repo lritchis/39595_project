@@ -1,6 +1,10 @@
 #include "Attack.h"
 
 Attack::Attack() {
+
+}
+
+Attack::Attack(int i) {
     std::cout << "Creating an Attack" << std::endl;
 }
 

@@ -5,6 +5,7 @@ Container::Container() : Thing() {
 }
 
 Container::Container(const Container& orig) : Thing(orig) {
+    desc = orig.getDescription();
     accept = orig.getAccepts();
     items = orig.getItems();
 }

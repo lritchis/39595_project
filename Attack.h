@@ -8,6 +8,7 @@
 class Attack {
 public:
     Attack();
+    Attack(int i);
     Attack(const Attack& orig);
     virtual ~Attack();
 

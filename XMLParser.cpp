@@ -1,4 +1,3 @@
-#define TIXML_USE_STL
 #include <string>
 #include <vector>
 #include <iostream>
@@ -23,16 +22,16 @@ Dungeon XMLParser::parseDungeon(TiXmlElement* element) {
 		// this function will cast the node if its a TiXmlElement, or returh NULL if it is not
 		// there is also a ToText function to get a TiXmlText, which represents raw text inside an XML element
 		TiXmlElement* childElement = node->ToElement();
-		if (childElement->ValueStr() == "Room") {
+		if (childElement->ValueStr() == "room") {
 			dungeon.addRoom(parseRoom(childElement));
 		}
-        else if (childElement->ValueStr() == "Item") {
+        else if (childElement->ValueStr() == "item") {
 			dungeon.addItem(parseItem(childElement));
 		}
-        else if (childElement->ValueStr() == "Container") {
+        else if (childElement->ValueStr() == "container") {
 			dungeon.addContainer(parseContainer(childElement));
 		}
-        else if (childElement->ValueStr() == "Creature") {
+        else if (childElement->ValueStr() == "creature") {
 			dungeon.addCreature(parseCreature(childElement));
 		}
 	}
@@ -60,48 +59,49 @@ Room XMLParser::parseRoom(TiXmlElement* element) {
 			
             // ValueStr gets the name of the element type
 			std::string name = childElement->ValueStr();
-			// this method gets the text contained inside the node
-			std::string value = childElement->GetText();
-
+			
 			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
-			if (name == "name") {
-				room.setName(value);
-			}
-			else if (name == "status") {
-				room.setStatus(value);
-			}
-			else if (name == "type") {
-				room.setType(value);
-			}
-            else if (name == "description") {
-				room.setDescription(value);
-			}
-            else if (name == "border") {
-				std::string direction = getTextFromNamedChild(childElement, "direction");
-                if(direction == "north") {
-                    room.setNorth(getTextFromNamedChild(childElement, "name"));
-                }
-                else if(direction == "south") {
-                    room.setSouth(getTextFromNamedChild(childElement, "name"));
-                }
-                else if(direction == "east") {
-                    room.setEast(getTextFromNamedChild(childElement, "name"));
-                }
-                else if(direction == "west") {
-                    room.setWest(getTextFromNamedChild(childElement, "name"));
-                }
-			}
-            else if (name == "item") {
-                room.addItem(value);
-            }
-            else if (name == "container") {
-                room.addContainer(value);
-            }
-            else if (name == "creature") {
-                room.addCreature(value);
-            }
-			else if (name == "trigger") {
+			if (name == "trigger") {
 				room.addTrigger(parseTrigger(childElement));
+			}
+			else if (name == "border") {
+				std::string direction = getTextFromNamedChild(childElement, "direction");
+				if(direction == "north") {
+					room.setNorth(getTextFromNamedChild(childElement, "name"));
+				}
+				else if(direction == "south") {
+					room.setSouth(getTextFromNamedChild(childElement, "name"));
+				}
+				else if(direction == "east") {
+					room.setEast(getTextFromNamedChild(childElement, "name"));
+				}
+				else if(direction == "west") {
+					room.setWest(getTextFromNamedChild(childElement, "name"));
+				}
+			}
+			else {
+				std::string value = childElement->GetText();
+				if (name == "name") {
+					room.setName(value);
+				}
+				else if (name == "status") {
+					room.setStatus(value);
+				}
+				else if (name == "type") {
+					room.setType(value);
+				}
+				else if (name == "description") {
+					room.setDescription(value);
+				}
+				else if (name == "item") {
+					room.addItem(value);
+				}
+				else if (name == "container") {
+					room.addContainer(value);
+				}
+				else if (name == "creature") {
+					room.addCreature(value);
+				}
 			}
 		}
 	}
@@ -122,28 +122,30 @@ Item XMLParser::parseItem(TiXmlElement* element) {
 		if (childElement != NULL) {
 			// ValueStr gets the name of the element type
 			std::string name = childElement->ValueStr();
-			// this method gets the text contained inside the node
-			std::string value = childElement->GetText();
 
 			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
-			if (name == "name") {
-				item.setName(value);
-			}
-			else if (name == "status") {
-				item.setStatus(value);
-			}
-			else if (name == "description") {
-				item.setDescription(value);
-			}
-			else if (name == "writing") {
-				item.setWriting(value);
-			}
-			else if (name == "turnon") {
+			if (name == "turnon") {
 				item.setTurnonAction(getTextFromNamedChild(childElement, "action"));
 				item.setTurnonPrint(getTextFromNamedChild(childElement, "print"));
 			}
 			else if (name == "trigger") {
 				item.addTrigger(parseTrigger(childElement));
+			}
+			else {
+				// this method gets the text contained inside the node
+				std::string value = childElement->GetText();
+				if (name == "name") {
+					item.setName(value);
+				}
+				else if (name == "status") {
+					item.setStatus(value);
+				}
+				else if (name == "description") {
+					item.setDescription(value);
+				}
+				else if (name == "writing") {
+					item.setWriting(value);
+				}
 			}
 		}
 	}
@@ -164,27 +166,28 @@ Container XMLParser::parseContainer(TiXmlElement* element) {
 		if (childElement != NULL) {
 			// ValueStr gets the name of the element type
 			std::string name = childElement->ValueStr();
-			// this method gets the text contained inside the node
-			std::string value = childElement->GetText();
-
+			
 			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
-			if (name == "name") {
-				container.setName(value);
-			}
-			else if (name == "status") {
-				container.setStatus(value);
-			}
-			else if (name == "description") {
-				container.setDescription(value);
-			}
-			else if (name == "accept") {
-				container.addAccept(value);
-			}
-			else if (name == "item") {
-				container.addItem(value);
-			}
-			else if (name == "trigger") {
+			if (name == "trigger") {
 				container.addTrigger(parseTrigger(childElement));
+			}
+			else {
+				std::string value = childElement->GetText();
+				if (name == "name") {
+					container.setName(value);
+				}
+				else if (name == "status") {
+					container.setStatus(value);
+				}
+				else if (name == "description") {
+					container.setDescription(value);
+				}
+				else if (name == "accept") {
+					container.addAccept(value);
+				}
+				else if (name == "item") {
+					container.addItem(value);
+				}
 			}
 		}
 	}
@@ -202,24 +205,25 @@ Creature XMLParser::parseCreature(TiXmlElement* element) {
 		if (childElement != NULL) {
 			// ValueStr gets the name of the element type
 			std::string name = childElement->ValueStr();
-			// this method gets the text contained inside the node
-			std::string value = childElement->GetText();
-
+			
 			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
-			if (name == "name") {
-				creature.setName(value);
-			}
-			else if (name == "status") {
-				creature.setStatus(value);
-			}
-			else if (name == "vulnerability") {
-				creature.addVulnerability(value);
-			}
-			else if (name == "attack") {
+			if (name == "attack") {
 				creature.setAttack(parseAttack(childElement));
 			}
 			else if (name == "trigger") {
 				creature.addTrigger(parseTrigger(childElement));
+			}
+			else {
+				std::string value = childElement->GetText();
+				if (name == "name") {
+					creature.setName(value);
+				}
+				else if (name == "status") {
+					creature.setStatus(value);
+				}
+				else if (name == "vulnerability") {
+					creature.addVulnerability(value);
+				}
 			}
 		}
 	}
@@ -237,24 +241,25 @@ Trigger XMLParser::parseTrigger(TiXmlElement* element) {
 		if (childElement != NULL) {
 			// ValueStr gets the name of the element type
 			std::string name = childElement->ValueStr();
-			// this method gets the text contained inside the node
-			std::string value = childElement->GetText();
 
 			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
-			if (name == "type") {
-				trigger.setType(value);
-			}
-			else if (name == "command") {
-				trigger.setCommand(value);
-			}
-			else if (name == "condition") {
+			if (name == "condition") {
 				trigger.addCondition(parseCondition(childElement));
 			}
-			else if (name == "print") {
-				trigger.addPrint(value);
-			}
-			else if (name == "action") {
-				trigger.addAction(value);
+			else {
+				std::string value = childElement->GetText();
+				if (name == "type") {
+					trigger.setType(value);
+				}
+				else if (name == "command") {
+					trigger.setCommand(value);
+				}
+				else if (name == "print") {
+					trigger.addPrint(value);
+				}
+				else if (name == "action") {
+					trigger.addAction(value);
+				}
 			}
 		}
 	}
@@ -266,24 +271,22 @@ Attack XMLParser::parseAttack(TiXmlElement* element) {
 	// there are two different ways to parse the values contained in nested elements
 	// this function iterates all the elements child nodes nodes, and if an element matches one of the expected names then set the cooresponding attribute
 	// see parseClub for the other method
-	Attack attack = Attack();
+	Attack attack = Attack(0);
 	for (TiXmlNode* node = element->IterateChildren(NULL); node != NULL; node = element->IterateChildren(node)) {
 		TiXmlElement* childElement = node->ToElement();
 		if (childElement != NULL) {
 			// ValueStr gets the name of the element type
 			std::string name = childElement->ValueStr();
-			// this method gets the text contained inside the node
-			std::string value = childElement->GetText();
-
+			
 			// need a condition for each attribute we want to parse. Any unknown attributes are ignored
 			if (name == "condition") {
 				attack.addCondition(parseCondition(childElement));
 			}
 			else if (name == "print") {
-				attack.addPrint(value);
+				attack.addPrint(childElement->GetText());
 			}
 			else if (name == "action") {
-				attack.addAction(value);
+				attack.addAction(childElement->GetText());
 			}
 		}
 	}
@@ -328,7 +331,7 @@ Condition XMLParser::parseCondition(TiXmlElement* element) {
  * If the passed element has a child element with the given name, this method returns the text contained in the element
  * If the passed element does not have a child element with the given name, or the child has no text, an empty string is returned
  */
-std::string getTextFromNamedChild(TiXmlElement* element, std::string name) {
+std::string XMLParser::getTextFromNamedChild(TiXmlElement* element, std::string name) {
 	TiXmlElement* child = element->FirstChildElement(name);
 	if (child != NULL) {
 		// we could use GetText instead of getting the child and calling ToText, but I wanted to show another method of parsing the child node
@@ -358,13 +361,13 @@ Dungeon XMLParser::parseXML(std::string filename) {
 	// null check handles the case where the filename is not a valid XML file
 	// there may be a way to get more info (determine whether the file is missing or just contains invalid XML), but for the example this is good enough
 	if (rootElement == NULL) {
-		std::cerr << "Invalid XML file, contains no data" << std::endl;
+		std::cout << "Invalid XML file, contains no data" << std::endl;
 		Dungeon dungeon = Dungeon();
 		return dungeon;
 	}
 	// this validation is not strictly needed, but its can help avoid the problem of accidently using an XML file from the wrong source
 	if (rootElement->ValueStr() != "map") {
-		std::cerr << "Invalid XML file, should start with a 'map'" << std::endl;
+		std::cout << "Invalid XML file, should start with a 'map'" << std::endl;
 		Dungeon dungeon = Dungeon();
 		return dungeon;
 	}
@@ -697,12 +700,11 @@ Condition* XMLParser::parseCondition(TiXmlElement* element) {
 	return condition;
 }
 
-/**
+
  * Helper function to get the text contained within the element with the given name
  * If the passed element has a child element with the given name, this method returns the text contained in the element
  * If the passed element does not have a child element with the given name, or the child has no text, an empty string is returned
- */
-/*
+
 std::string getTextFromNamedChild(TiXmlElement* element, std::string name) {
 	TiXmlElement* child = element->FirstChildElement(name);
 	if (child != NULL) {
@@ -719,11 +721,9 @@ std::string getTextFromNamedChild(TiXmlElement* element, std::string name) {
 	return "";
 }
 
-/**
  * Parses the XML file for the given filename. Returns a vector of students if successful
  * If failed, prints an error and returns an empty vector
- */
-/*
+
 Dungeon* XMLParser::parseXML(std::string filename) {
 	// start parsing XML, we first need to create a TiXmlDocument and read it
 	TiXmlDocument doc(filename);
