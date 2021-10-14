@@ -25,14 +25,14 @@ void Attack::addAction(std::string actionToAdd) {
     std::cout << "Adding action to Attack: " << actionToAdd << std::endl;
 }
 
-const std::vector<Condition> Attack::getConditions() {
+std::vector<Condition> Attack::getConditions() const {
     return conditions;
 }
 
-const std::vector<std::string> Attack::getPrints() {
+std::vector<std::string> Attack::getPrints() const {
     return prints;
 }
 
-const std::vector<std::string> Attack::getActions() {
+std::vector<std::string> Attack::getActions() const {
     return actions;
 }
