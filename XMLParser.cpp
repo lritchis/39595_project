@@ -359,12 +359,14 @@ Dungeon XMLParser::parseXML(std::string filename) {
 	// there may be a way to get more info (determine whether the file is missing or just contains invalid XML), but for the example this is good enough
 	if (rootElement == NULL) {
 		std::cerr << "Invalid XML file, contains no data" << std::endl;
-		return;
+		Dungeon dungeon = Dungeon();
+		return dungeon;
 	}
 	// this validation is not strictly needed, but its can help avoid the problem of accidently using an XML file from the wrong source
 	if (rootElement->ValueStr() != "map") {
 		std::cerr << "Invalid XML file, should start with a 'map'" << std::endl;
-		return;
+		Dungeon dungeon = Dungeon();
+		return dungeon;
 	}
 	// found the proper root element, so call the relevant parsing function
 	return parseDungeon(rootElement);
