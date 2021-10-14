@@ -8,6 +8,7 @@ class Container : public Thing {
 public:
     Container();
     Container(const Container& orig);
+    virtual ~Container();
 
     virtual void setDescription(std::string descToSet);
     virtual void addAccept(std::string acceptToAdd);

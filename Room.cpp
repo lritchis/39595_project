@@ -19,6 +19,10 @@ Room::Room(const Room& orig) {
     triggers = orig.getTriggers();
 }
 
+Room::~Room() {
+    
+}
+
 void Room::setName(std::string nameToSet) {
     name = nameToSet;
     std::cout << "Setting room name to " << nameToSet << std::endl;
