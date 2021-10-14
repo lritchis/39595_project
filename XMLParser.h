@@ -23,6 +23,7 @@ private:
     Trigger parseTrigger(TiXmlElement* element);
     Attack parseAttack(TiXmlElement* element);
     Condition parseCondition(TiXmlElement* element);
+    std::string getTextFromNamedChild(TiXmlElement* element, std::string name);
     
     /*
     Dungeon* parseDungeon(TiXmlElement* element);
