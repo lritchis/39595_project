@@ -12,6 +12,8 @@ Trigger::Trigger(const Trigger& orig) {
     actions = orig.actions;
 }
 
+Trigger::~Trigger() {}
+
 void Trigger::setType(std::string typeToSet) {
     type = typeToSet;
     std::cout << "Setting trigger type to " << typeToSet << std::endl;

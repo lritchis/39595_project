@@ -8,6 +8,8 @@ Creature::Creature(const Creature& orig) : Thing(orig) {
     vulnerability = orig.vulnerability;
 }
 
+Creature::~Creature() {}
+
 void Creature::addVulnerability(std::string vulnToAdd) {
     std::cout << "Added vulnarability of " << vulnToAdd << "to creature" << std::endl;
     vulnerability.push_back(vulnToAdd);

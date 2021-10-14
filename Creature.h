@@ -10,6 +10,7 @@ class Creature : public Thing {
 public:
     Creature();
     Creature(const Creature& orig);
+    virtual ~Creature();
 
     virtual void addVulnerability(std::string vulnToAdd);
     virtual void setAttack(Attack attackToSet);

@@ -10,6 +10,8 @@ public:
     Trigger();
     Trigger(const Trigger& orig);
 
+    virtual ~Trigger();
+
     virtual void setType(std::string typeToSet);
     virtual void setCommand(std::string commandToSet);
     virtual void addCondition(Condition conditionToAdd);

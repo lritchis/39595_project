@@ -12,6 +12,8 @@ Item::Item(const Item& orig) : Thing(orig) {
     turnonPrint = orig.getTurnonPrint();
 }
 
+Item::~Item() {}
+
 void Item::setDescription(std::string descToSet) {
     std::cout << "Setting item description to " << descToSet << std::endl;
     desc = descToSet;
