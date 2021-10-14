@@ -271,6 +271,10 @@ Attack XMLParser::parseAttack(TiXmlElement* element) {
 	// there are two different ways to parse the values contained in nested elements
 	// this function iterates all the elements child nodes nodes, and if an element matches one of the expected names then set the cooresponding attribute
 	// see parseClub for the other method
+
+	// We need to use an "int" constructor because a creature object initializes an attack with the default attack constructor
+	// So, when we want the output stream to actually recognize the creation of an attack object, we need to use a different
+	// constructor than the default one used by the creature constructor
 	Attack attack = Attack(0);
 	for (TiXmlNode* node = element->IterateChildren(NULL); node != NULL; node = element->IterateChildren(node)) {
 		TiXmlElement* childElement = node->ToElement();
@@ -362,13 +366,13 @@ Dungeon XMLParser::parseXML(std::string filename) {
 	// there may be a way to get more info (determine whether the file is missing or just contains invalid XML), but for the example this is good enough
 	if (rootElement == NULL) {
 		std::cout << "Invalid XML file, contains no data" << std::endl;
-		Dungeon dungeon = Dungeon();
+		Dungeon dungeon = Dungeon(0);
 		return dungeon;
 	}
 	// this validation is not strictly needed, but its can help avoid the problem of accidently using an XML file from the wrong source
 	if (rootElement->ValueStr() != "map") {
 		std::cout << "Invalid XML file, should start with a 'map'" << std::endl;
-		Dungeon dungeon = Dungeon();
+		Dungeon dungeon = Dungeon(0);
 		return dungeon;
 	}
 	// found the proper root element, so call the relevant parsing function

@@ -7,6 +7,10 @@ Dungeon::Dungeon() {
     std::cout << "Creating Dungeon Map" << std::endl;
 }
 
+Dungeon::Dungeon(int i) {
+    std::cout << "Creating empty Dungeon Map" << std::endl;
+}
+
 Dungeon::Dungeon(const Dungeon& orig) {
     rooms = orig.getRooms();
     creatures = orig.getCreatures();

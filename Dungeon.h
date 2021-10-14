@@ -11,6 +11,7 @@
 class Dungeon {
 public:
     Dungeon();
+    Dungeon(int i);
     Dungeon(const Dungeon& orig);
     virtual void addRoom(Room room);
     virtual void addItem(Item item);

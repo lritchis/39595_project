@@ -16,8 +16,13 @@ SOURCES=main.cpp $(CLASSES) tinyxmlerror.cpp tinyxmlparser.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 HEADERS=$(CLASSES:.cpp=.h)
 
-# This variable can be overridden to run the program with a different XML file
-XML_FILE=sample.xml
+# Uncomment one of the six options based on which file you want to parse
+XML_FILE=containersample.xml
+#XML_FILE=creaturesample.xml
+#XML_FILE=itemsample.xml
+#XML_FILE=roomsample.xml
+#XML_FILE=sample.xml
+#XML_FILE=triggersample.xml
 
 # Additional files to include in the zip that are not source files, both are included for samples
 PROJECT_FILES=Makefile #ConsoleApplication.sln ConsoleApplication.vcxproj MakefileProject.sln MakefileProject.vcxproj Readme.pdf
