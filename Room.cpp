@@ -19,9 +19,7 @@ Room::Room(const Room& orig) {
     triggers = orig.getTriggers();
 }
 
-Room::~Room() {
-    
-}
+Room::~Room() {}
 
 void Room::setName(std::string nameToSet) {
     name = nameToSet;

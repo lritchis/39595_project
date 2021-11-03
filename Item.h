@@ -15,17 +15,23 @@ public:
     virtual void setWriting(std::string writingToSet);
     virtual void setTurnonAction(std::string turnonActionToSet);
     virtual void setTurnonPrint(std::string turnonPrintToSet);
+    virtual void setOwner(std::string ownerToSet);
+    virtual void setROC(std::string rocToSet);
 
     virtual std::string getDescription() const;
     virtual std::string getWriting() const;
     virtual std::string getTurnonAction() const;
     virtual std::string getTurnonPrint() const;
+    virtual std::string getOwner() const;
+    virtual std::string getROC() const;
 
 protected:
     std::string desc;
     std::string writing;
     std::string turnonAction;
     std::string turnonPrint;
+    std::string owner;
+    std::string roomOrContainer;
 };
 
 #endif

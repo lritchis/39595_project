@@ -1,7 +1,7 @@
 #include "Item.h"
 #include "Thing.h"
 
-Item::Item() : Thing () {
+Item::Item() : Thing(), desc(""), writing(""), owner(""), roomOrContainer("") {
     std::cout << "Creating an Item" << std::endl;
 }
 
@@ -10,6 +10,8 @@ Item::Item(const Item& orig) : Thing(orig) {
     writing = orig.getWriting();
     turnonAction = orig.getTurnonAction();
     turnonPrint = orig.getTurnonPrint();
+    owner = orig.getOwner();
+    roomOrContainer = orig.getROC();
 }
 
 Item::~Item() {}
@@ -34,6 +36,14 @@ void Item::setTurnonPrint(std::string turnonPrintToSet) {
     turnonPrint = turnonPrintToSet;
 }
 
+void Item::setOwner(std::string ownerToSet) {
+    owner = ownerToSet;
+}
+
+void Item::setROC(std::string rocToSet) {
+    roomOrContainer = rocToSet;
+}
+
 std::string Item::getDescription() const {
     return desc;
 }
@@ -48,4 +58,12 @@ std::string Item::getTurnonAction() const {
 
 std::string Item::getTurnonPrint() const {
     return turnonPrint;
+}
+
+std::string Item::getOwner() const {
+    return owner;
+}
+
+std::string Item::getROC() const {
+    return roomOrContainer;
 }

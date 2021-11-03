@@ -45,5 +45,3 @@ void Thing::addTrigger(Trigger triggerToAdd) {
     triggers.push_back(triggerToAdd);
     std::cout << "Adding a trigger to an Item, Container, or Creature" << std::endl;
 }
-
-

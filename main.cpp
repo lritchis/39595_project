@@ -3,6 +3,7 @@
 #include <vector>
 #include "Dungeon.h"
 #include "XMLParser.h"
+#include "Handler.h"
 
 int main(int argc, char** args) {
 	// prompt for XML file to parse
@@ -26,6 +27,21 @@ int main(int argc, char** args) {
 	// call the parser to parse the XML
 	XMLParser parser;
 	Dungeon dungeon = parser.parseXML(filename);
+	
+	Handler handler(&dungeon);
+
+	int check = handler.setItemOwners();
+	
+	if (check == 0) {
+		std::cout << "TROUBLESHOOT 69" << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	//check = handler.handleInput();
+
+	if (check == 0) {
+		return EXIT_SUCCESS;
+	}
 
 	// print all results
 	/*std::cout << "Found " << students.size() << " students" << std::endl;
@@ -47,7 +63,7 @@ int main(int argc, char** args) {
 	// wait for key press to exit, added for the sake of visual studio as the command window closes after the program finishes
 	// skipped when a filename is given via command line, that is what the makefile is set up to use
 	// worth pointing out that this is not strictly related to XML parsing, it is just done to make testing the program easier
-	if (shouldPause) std::cin.get();
+	// if (shouldPause) std::cin.get();
 
-	return 0;
+	return EXIT_SUCCESS;
 }
