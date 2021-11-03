@@ -42,16 +42,16 @@ std::vector<std::string> Container::getItems() const {
 }
 
 bool Container::removeItem(std::string itemToRemove) {
-        // Find the index of the item we're assigning the ownership of
-        int itemIndex;
-        std::vector<std::string>::iterator it;
-        it = std::find_if(items.begin(), items.end(), [itemToRemove](const std::string& i){ return i == itemToRemove; });
-        if (it != items.end()) {
-            itemIndex = it - items.begin();
-            items.erase(items.begin() + itemIndex);
-            return 1;
-        }
-        else {
-            return 0; // item not in list
-        }
+    // Find the index of the item we're assigning the ownership of
+    int itemIndex;
+    std::vector<std::string>::iterator it;
+    it = std::find_if(items.begin(), items.end(), [itemToRemove](const std::string& i){ return i == itemToRemove; });
+    if (it != items.end()) {
+        itemIndex = it - items.begin();
+        items.erase(items.begin() + itemIndex);
+        return true;
+    }
+    else {
+        return false; // item not in list
+    }
 }

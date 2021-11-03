@@ -36,7 +36,7 @@ int main(int argc, char** args) {
 		return EXIT_FAILURE;
 	}
 
-	//check = handler.handleInput();
+	check = handler.handleInput();
 
 	if (check == 0) {
 		return EXIT_SUCCESS;

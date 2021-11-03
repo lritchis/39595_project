@@ -12,10 +12,10 @@ Dungeon::Dungeon(int i) {
 }
 
 Dungeon::Dungeon(const Dungeon& orig) {
-    rooms = orig.getRooms();
-    creatures = orig.getCreatures();
-    items = orig.getItems();
-    containers = orig.getContainers();
+    rooms = orig.getRooms(0);
+    creatures = orig.getCreatures(0);
+    items = orig.getItems(0);
+    containers = orig.getContainers(0);
 }
 
 void Dungeon::addRoom(Room room) {
@@ -38,18 +38,34 @@ void Dungeon::addContainer(Container container) {
     std::cout << "Adding container " << container.getName() << " to dungeon" << std::endl;
 }
 
-std::vector<Room> Dungeon::getRooms() const {
+std::vector<Room>* Dungeon::getRooms() {
+    return &rooms;
+}
+
+std::vector<Creature>* Dungeon::getCreatures() {
+    return &creatures;
+}
+
+std::vector<Item>* Dungeon::getItems() {
+    return &items;
+}
+
+std::vector<Container>* Dungeon::getContainers() {
+    return &containers;
+}
+
+std::vector<Room> Dungeon::getRooms(int i) const {
     return rooms;
 }
 
-std::vector<Creature> Dungeon::getCreatures() const {
+std::vector<Creature> Dungeon::getCreatures(int i) const {
     return creatures;
 }
 
-std::vector<Item> Dungeon::getItems() const {
+std::vector<Item> Dungeon::getItems(int i) const {
     return items;
 }
 
-std::vector<Container> Dungeon::getContainers() const {
+std::vector<Container> Dungeon::getContainers(int i) const {
     return containers;
 }

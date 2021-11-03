@@ -18,10 +18,15 @@ public:
     virtual void addCreature(Creature creature);
     virtual void addContainer(Container container);
 
-    std::vector<Room> getRooms() const;
-    std::vector<Creature> getCreatures() const;
-    std::vector<Item> getItems() const;
-    std::vector<Container>getContainers() const;
+    std::vector<Room>* getRooms();
+    std::vector<Creature>* getCreatures();
+    std::vector<Item>* getItems();
+    std::vector<Container>* getContainers();
+    
+    std::vector<Room> getRooms(int i) const;
+    std::vector<Creature> getCreatures(int i) const;
+    std::vector<Item> getItems(int i) const;
+    std::vector<Container> getContainers(int i) const;
 
 private:
     std::vector<Room> rooms;
