@@ -21,9 +21,8 @@ HEADERS=$(CLASSES:.cpp=.h)
 #XML_FILE=creaturesample.xml
 #XML_FILE=itemsample.xml
 #XML_FILE=roomsample.xml
-#XML_FILE=sample.xml
+XML_FILE=sample.xml
 #XML_FILE=triggersample.xml
-XML_FILE=test.xml
 
 XML_FILES=containersample.xml creaturesample.xml itemsample.xml roomsample.xml sample.xml triggersample.xml
 

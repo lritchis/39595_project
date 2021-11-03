@@ -33,7 +33,6 @@ int main(int argc, char** args) {
 	int check = handler.setItemOwners();
 	
 	if (check == 0) {
-		std::cout << "TROUBLESHOOT 69" << std::endl;
 		return EXIT_FAILURE;
 	}
 
