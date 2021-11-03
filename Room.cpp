@@ -126,5 +126,20 @@ std::vector<std::string> Room::getCreatures() const {
 }
 
 std::vector <Trigger> Room::getTriggers() const {
-    return triggers;
+   return triggers;
+}
+
+bool Room::removeItem(std::string itemToRemove) {
+        // Find the index of the item we're assigning the ownership of
+        int itemIndex;
+        std::vector<std::string>::iterator it;
+        it = std::find_if(items.begin(), items.end(), [itemToRemove](const std::string& i){ return i == itemToRemove; });
+        if (it != items.end()) {
+            itemIndex = it - items.begin();
+            items.erase(items.begin() + itemIndex);
+            return 1;
+        }
+        else {
+            return 0; // item not in list
+        }
 }

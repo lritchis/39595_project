@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 #include "Trigger.h"
+#include <iterator>
+#include <algorithm>
 
 class Room {
 public:
@@ -39,6 +41,8 @@ public:
     virtual std::vector<std::string> getContainers() const;
     virtual std::vector<std::string> getCreatures() const;
     virtual std::vector<Trigger> getTriggers() const;
+    
+    virtual bool removeItem(std::string itemToRemove); 
 
     // !! should we add getters for items, containers, etc.?
 

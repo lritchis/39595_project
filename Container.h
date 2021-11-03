@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 #include "Thing.h"
+#include <iterator>
+#include <algorithm>
+
 class Container : public Thing {
 public:
     Container();
@@ -17,6 +20,8 @@ public:
     virtual std::string getDescription() const;
     virtual std::vector<std::string> getAccepts() const;
     virtual std::vector<std::string> getItems() const;
+
+    virtual bool removeItem(std::string itemToRemove);
 
 protected:
     std::string desc;
