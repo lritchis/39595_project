@@ -13,7 +13,6 @@ Thing::Thing(const Thing& orig) {
 
 void Thing::setName(std::string nameToSet) {
     name = nameToSet;
-    std::cout << "Setting name to " << nameToSet << std::endl;
 }
 
 void Thing::setRoomNum(int roomToSet) {
@@ -22,7 +21,6 @@ void Thing::setRoomNum(int roomToSet) {
 
 void Thing::setStatus(std::string statusToSet) {
     status = statusToSet;
-    std::cout << "Setting status to " << statusToSet << std::endl;
 }
 
 std::string Thing::getName() const {
@@ -43,5 +41,4 @@ std::vector<Trigger> Thing::getTriggers() const {
 
 void Thing::addTrigger(Trigger triggerToAdd) {
     triggers.push_back(triggerToAdd);
-    std::cout << "Adding a trigger to an Item, Container, or Creature" << std::endl;
 }
