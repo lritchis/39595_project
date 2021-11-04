@@ -51,6 +51,7 @@ int Handler::handleKey(std::string input) {
 			it = std::find_if (roomList.begin(), roomList.end(), [destination](Room r){ return r.getName() == destination; });
 			if (it != roomList.end()) {
 				currRoomIndex = it - roomList.begin();
+				currRoom = roomList[currRoomIndex].getName();
 				
 				// Print the description of the room you just entered
 				std::cout << roomList[currRoomIndex].getDescription() << std::endl;
@@ -74,6 +75,7 @@ int Handler::handleKey(std::string input) {
 			it = std::find_if (roomList.begin(), roomList.end(), [destination](Room r){ return r.getName() == destination; });
 			if (it != roomList.end()) {
 				currRoomIndex = it - (roomList.begin());
+				currRoom = roomList[currRoomIndex].getName();
 				
 				// Print the description of the room you just entered
 				std::cout << roomList[currRoomIndex].getDescription() << std::endl;
@@ -97,6 +99,7 @@ int Handler::handleKey(std::string input) {
 			it = std::find_if (roomList.begin(), roomList.end(), [destination](Room r){ return r.getName() == destination; });
 			if (it != roomList.end()) {
 				currRoomIndex = it - roomList.begin();
+				currRoom = roomList[currRoomIndex].getName();
 				
 				// Print the description of the room you just entered
 				std::cout << roomList[currRoomIndex].getDescription() << std::endl;
@@ -120,6 +123,7 @@ int Handler::handleKey(std::string input) {
 			it = std::find_if (roomList.begin(), roomList.end(), [destination](Room r){ return r.getName() == destination; });
 			if (it != roomList.end()) {
 				currRoomIndex = it - roomList.begin();
+				currRoom = roomList[currRoomIndex].getName();
 				
 				// Print the description of the room you just entered
 				std::cout << roomList[currRoomIndex].getDescription() << std::endl;
@@ -234,7 +238,6 @@ int Handler::handleKey(std::string input) {
 
 			(*(dungeon->getItems()))[itemIndex].setOwner(currRoom);
 			(*(dungeon->getItems()))[itemIndex].setROC("Room");
-			std::cout << "Item " << (dungeon->getItems(0))[itemIndex].getName() << " owner is " << (dungeon->getItems(0))[itemIndex].getOwner() << " and ROC is " << (dungeon->getItems(0))[itemIndex].getROC() << std::endl;
 		}
 		else {
 			std::cout << itemName << " not in inventory." << std::endl;
@@ -296,9 +299,6 @@ int Handler::setItemOwners() {
 				return 0;
 			}
 		}
-	}
-	for (int i = 0; i < (dungeon->getItems())->size(); i++) {
-		std::cout << "Item " << (dungeon->getItems(0))[i].getName() << " owner is " << (dungeon->getItems(0))[i].getOwner() << " and ROC is " << (dungeon->getItems(0))[i].getROC() << std::endl;
 	}
 	return 1;
 }
