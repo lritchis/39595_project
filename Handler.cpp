@@ -168,6 +168,12 @@ int Handler::handleKey(std::string input) {
 			// Add the item to inventory
 			inventory.push_back((dungeon->getItems(0))[itemIndex].getName());
 			std::cout << "Item " << itemName << " added to the inventory." << std::endl;
+			
+			//(dungeon->getItems(0))[itemIndex].setOwner("");
+			//std::cout << "Item owner is " << (dungeon->getItems(0))[itemIndex].getOwner() << std::endl;
+
+			//inventory.push_back((dungeon->getItems(0))[itemIndex].getName());
+			
 			return 1;
 		}
 		else {
@@ -205,9 +211,32 @@ int Handler::handleKey(std::string input) {
 		}
 	}
 	else if (input.substr(0,5) == "drop " || input.substr(0,5) == "Drop " || input.substr(0,5) == "DROP ") {
+		// Find the name of the item we're dropping
+		std::string itemName = input.substr(5);
+		
 		// Deal with an empty inventory
 		if (inventory.empty()) {
-			std::cout << "Inventory: empty" << std::endl;
+			std::cout << itemName << " not in inventory." << std::endl;
+			return 1;
+		}
+
+		// Find the index in inventory of the item we're dropping
+		int itemIndex;
+		std::vector<std::string>::iterator it;
+		it = std::find_if(inventory.begin(), inventory.end(), [itemName](const std::string& i){ return i == itemName; });
+		if (it != inventory.end()) {
+			itemIndex = it - inventory.begin();
+
+			// Remove item from inventory
+	        inventory.erase(inventory.begin() + itemIndex);
+			std::cout << itemName << " dropped." << std::endl;
+
+			// Add item to current room
+			dungeon->getRooms(0)[currRoomIndex].addItem(itemName);
+		}
+		else {
+			std::cout << itemName << " not in inventory." << std::endl;
+			return 1;
 		}
 	}
 	else if (input == "QUIT" || input == "Quit" || input == "quit") {
@@ -234,8 +263,9 @@ int Handler::setItemOwners() {
 			it = std::find_if(itemList.begin(), itemList.end(), [theItem](const Item& i){ return i.getName() == theItem; });
 			if (it != itemList.end()) {
 				itemIndex = it - itemList.begin();
-				itemList[itemIndex].setOwner(theRoom);
-				itemList[itemIndex].setROC("Room");
+				dungeon->getItems()[itemIndex].setOwner(theRoom);
+				dungeon->getItems()[itemIndex].setROC("Room");
+				std::cout << "Item " << theItem << " appears in room " << theRoom << std::endl;
 			}
 			else {
 				std::cout << "Error: item " << theItem << " appears in room " << theRoom << ", but item " << theItem << " does not exist." << std::endl;
@@ -257,14 +287,18 @@ int Handler::setItemOwners() {
 			it = std::find_if(itemList.begin(), itemList.end(), [theItem](const Item& i){ return i.getName() == theItem; });
 			if (it != itemList.end()) {
 				itemIndex = it - itemList.begin();
-				itemList[itemIndex].setOwner(theContainer);
-				itemList[itemIndex].setROC("Container");
+				dungeon->getItems()[itemIndex].setOwner(theContainer);
+				dungeon->getItems()[itemIndex].setROC("Container");
+				std::cout << "Item " << theItem << " appears in container " << theContainer << std::endl;
 			}
 			else {
 				std::cout << "Error: item " << theItem << " appears in container " << theContainer << ", but item " << theItem << " does not exist." << std::endl;
 				return 0;
 			}
 		}
+	}
+	for (int i = 0; i < (dungeon->getItems())->size(); i++) {
+		std::cout << "Item " << (dungeon->getItems(0))[i].getName() << " owner is " << (dungeon->getItems(0))[i].getOwner() << " and ROC is " << (dungeon->getItems(0))[i].getROC() << std::endl;
 	}
 	return 1;
 }
