@@ -117,7 +117,7 @@ std::vector <Trigger> Room::getTriggers() const {
 }
 
 bool Room::removeItem(std::string itemToRemove) {
-    // Find the index of the item we're removing
+    // Find the index of the item we're assigning the ownership of
     int itemIndex;
     std::vector<std::string>::iterator it;
     it = std::find_if(items.begin(), items.end(), [itemToRemove](const std::string& i){ return i == itemToRemove; });
@@ -128,35 +128,5 @@ bool Room::removeItem(std::string itemToRemove) {
     }
     else {
         return false; // item not in list
-    }
-}
-
-bool Room::removeCreature(std::string creatureToRemove) {
-    // Find the index of the creature we're removing
-    int creatureIndex;
-    std::vector<std::string>::iterator it;
-    it = std::find_if(creatures.begin(), creatures.end(), [creatureToRemove](const std::string& c){ return c == creatureToRemove; });
-    if (it != creatures.end()) {
-        creatureIndex = it - creatures.begin();
-        creatures.erase(creatures.begin() + creatureIndex);
-        return true;
-    }
-    else {
-        return false; // creature not in list
-    }
-}
-
-bool Room::removeContainer(std::string containerToRemove) {
-    // Find the index of the container we're removing
-    int containerIndex;
-    std::vector<std::string>::iterator it;
-    it = std::find_if(containers.begin(), containers.end(), [containerToRemove](const std::string& c){ return c == containerToRemove; });
-    if (it != containers.end()) {
-        containerIndex = it - containers.begin();
-        containers.erase(containers.begin() + containerIndex);
-        return true;
-    }
-    else {
-        return false; // container not in list
     }
 }

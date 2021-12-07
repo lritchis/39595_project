@@ -21,7 +21,6 @@ public:
 protected:
     std::vector<std::string> vulnerability;
     Attack attack;
-    
 };
 
 #endif

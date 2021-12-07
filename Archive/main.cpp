@@ -30,7 +30,7 @@ int main(int argc, char** args) {
 	
 	Handler handler(&dungeon);
 
-	int check = handler.setObjectOwners();
+	int check = handler.setItemOwners();
 	
 	if (check == 0) {
 		return EXIT_FAILURE;

@@ -14,12 +14,10 @@ public:
     virtual ~Container();
 
     virtual void setDescription(std::string descToSet);
-    virtual void setOpen(bool openToSet);
     virtual void addAccept(std::string acceptToAdd);
     virtual void addItem(std::string itemToAdd);
 
     virtual std::string getDescription() const;
-    virtual bool getOpen() const;
     virtual std::vector<std::string> getAccepts() const;
     virtual std::vector<std::string> getItems() const;
 
@@ -27,7 +25,6 @@ public:
 
 protected:
     std::string desc;
-    bool open;
     std::vector<std::string> accept;
     std::vector<std::string> items;
 

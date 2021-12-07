@@ -13,13 +13,11 @@ public:
     virtual void setName(std::string nameToSet);
     virtual void setRoomNum(int roomToSet);
     virtual void setStatus(std::string statusToSet);
-    virtual void setOwner(std::string ownerToSet);
 
     virtual std::string getName() const;
     virtual int getRoomNum() const;
     virtual std::string getStatus() const;
     virtual std::vector<Trigger> getTriggers() const;
-    virtual std::string getOwner() const;
 
     virtual void addTrigger(Trigger triggerToAdd);
 
@@ -28,7 +26,6 @@ protected:
     int roomNum;
     std::string status;
     std::vector<Trigger> triggers;
-    std::string owner;
 
 };  
 

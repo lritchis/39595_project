@@ -1,14 +1,12 @@
 #include "Container.h"
 
-Container::Container() : Thing(), desc("") {
-    open = false;
+Container::Container() : Thing() {
 }
 
 Container::Container(const Container& orig) : Thing(orig) {
     desc = orig.getDescription();
     accept = orig.getAccepts();
     items = orig.getItems();
-    open = orig.getOpen();
 }
 
 Container::~Container() {
@@ -17,10 +15,6 @@ Container::~Container() {
 
 void Container::setDescription(std::string descToSet) {
     desc = descToSet;
-}
-
-void Container::setOpen(bool openToSet) {
-    open = openToSet;
 }
 
 void Container::addItem(std::string itemToAdd) {
@@ -35,10 +29,6 @@ std::string Container::getDescription() const {
     return desc;
 }
 
-bool Container::getOpen() const {
-    return open;
-}
-
 std::vector<std::string> Container::getAccepts() const {
     return accept;
 }
@@ -48,7 +38,7 @@ std::vector<std::string> Container::getItems() const {
 }
 
 bool Container::removeItem(std::string itemToRemove) {
-    // Find the index of the item we're removing
+    // Find the index of the item we're assigning the ownership of
     int itemIndex;
     std::vector<std::string>::iterator it;
     it = std::find_if(items.begin(), items.end(), [itemToRemove](const std::string& i){ return i == itemToRemove; });

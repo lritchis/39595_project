@@ -1,7 +1,7 @@
 #include "Thing.h"
 
-Thing::Thing() : name(""), roomNum(-1), status(""), owner("") {
-    
+Thing::Thing() : name(""), roomNum(-1), status("") {
+
 }
 
 Thing::Thing(const Thing& orig) {
@@ -9,7 +9,6 @@ Thing::Thing(const Thing& orig) {
     roomNum = orig.getRoomNum();
     status = orig.getStatus();
     triggers = orig.getTriggers();
-    owner = orig.getOwner();
 }
 
 void Thing::setName(std::string nameToSet) {
@@ -22,10 +21,6 @@ void Thing::setRoomNum(int roomToSet) {
 
 void Thing::setStatus(std::string statusToSet) {
     status = statusToSet;
-}
-
-void Thing::setOwner(std::string ownerToSet) {
-    owner = ownerToSet;
 }
 
 std::string Thing::getName() const {
@@ -42,10 +37,6 @@ std::string Thing::getStatus() const {
 
 std::vector<Trigger> Thing::getTriggers() const {
     return triggers;
-}
-
-std::string Thing::getOwner() const {
-    return owner;
 }
 
 void Thing::addTrigger(Trigger triggerToAdd) {

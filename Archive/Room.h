@@ -43,8 +43,6 @@ public:
     virtual std::vector<Trigger> getTriggers() const;
     
     virtual bool removeItem(std::string itemToRemove); 
-    virtual bool removeCreature(std::string creatureToRemove); 
-    virtual bool removeContainer(std::string containerToRemove); 
 
     // !! should we add getters for items, containers, etc.?
 

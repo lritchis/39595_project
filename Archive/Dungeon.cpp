@@ -63,19 +63,3 @@ std::vector<Item> Dungeon::getItems(int i) const {
 std::vector<Container> Dungeon::getContainers(int i) const {
     return containers;
 }
-
-bool Dungeon::removeRoom(std::string roomToRemove) {
-    // Find the index of the room we're removing
-    int roomIndex;
-    std::vector<Room>::iterator it;
-    it = std::find_if(rooms.begin(), rooms.end(), [roomToRemove](const Room& r){ return r.getName() == roomToRemove; });
-    if (it != rooms.end()) {
-        roomIndex = it - rooms.begin();
-
-        rooms.erase(rooms.begin() + roomIndex);
-        return true;
-    }
-    else {
-        return false; // room not in list
-    }
-}

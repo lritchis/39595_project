@@ -9,6 +9,7 @@ Item::Item(const Item& orig) : Thing(orig) {
     writing = orig.getWriting();
     turnonAction = orig.getTurnonAction();
     turnonPrint = orig.getTurnonPrint();
+    owner = orig.getOwner();
     roomOrContainer = orig.getROC();
 }
 
@@ -30,6 +31,10 @@ void Item::setTurnonPrint(std::string turnonPrintToSet) {
     turnonPrint = turnonPrintToSet;
 }
 
+void Item::setOwner(std::string ownerToSet) {
+    owner = ownerToSet;
+}
+
 void Item::setROC(std::string rocToSet) {
     roomOrContainer = rocToSet;
 }
@@ -48,6 +53,10 @@ std::string Item::getTurnonAction() const {
 
 std::string Item::getTurnonPrint() const {
     return turnonPrint;
+}
+
+std::string Item::getOwner() const {
+    return owner;
 }
 
 std::string Item::getROC() const {

@@ -28,8 +28,6 @@ public:
     std::vector<Item> getItems(int i) const;
     std::vector<Container> getContainers(int i) const;
 
-    virtual bool removeRoom(std::string roomToRemove); 
-
 private:
     std::vector<Room> rooms;
     std::vector<Creature> creatures;
