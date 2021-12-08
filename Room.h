@@ -40,7 +40,8 @@ public:
     virtual std::vector<std::string> getItems() const;
     virtual std::vector<std::string> getContainers() const;
     virtual std::vector<std::string> getCreatures() const;
-    virtual std::vector<Trigger> getTriggers() const;
+    virtual std::vector<Trigger> getTriggers(int i) const;
+    std::vector<Trigger>* getTriggers();
     
     virtual bool removeItem(std::string itemToRemove); 
     virtual bool removeCreature(std::string creatureToRemove); 

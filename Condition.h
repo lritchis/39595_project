@@ -14,13 +14,11 @@ public:
     virtual void setObject(std::string objectToSet);
     virtual void setStatus(std::string statusToSet);
     virtual void setOwner(std::string ownerToSet);
-    
-    
+
     virtual std::string getHas() const;
     virtual std::string getObject() const;
     virtual std::string getStatus() const;
     virtual std::string getOwner() const;
-    
     
 protected:
     std::string has;

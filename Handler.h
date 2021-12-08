@@ -11,6 +11,11 @@ public:
 	virtual int handleKey(std::string input);
     virtual int handleBehindTheScenes(std::string input);
     virtual int setObjectOwners();
+    virtual int checkCommandTriggers(std::string command);
+    virtual int checkItemCommandTriggers(std::string command, std::string item);
+    virtual int checkTriggers();
+    virtual int checkItemTriggers(std::string item);
+    virtual bool checkCondition(Condition cond);
 
 private:
     std::vector<std::string> inventory;

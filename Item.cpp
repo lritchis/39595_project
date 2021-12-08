@@ -1,7 +1,7 @@
 #include "Item.h"
 #include "Thing.h"
 
-Item::Item() : Thing(), desc(""), writing(""), owner(""), roomOrContainer("") {
+Item::Item() : Thing(), desc(""), writing(""), roomOrContainer("") {
 }
 
 Item::Item(const Item& orig) : Thing(orig) {

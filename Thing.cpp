@@ -8,7 +8,7 @@ Thing::Thing(const Thing& orig) {
     name = orig.getName();
     roomNum = orig.getRoomNum();
     status = orig.getStatus();
-    triggers = orig.getTriggers();
+    triggers = orig.getTriggers(0);
     owner = orig.getOwner();
 }
 
@@ -40,8 +40,12 @@ std::string Thing::getStatus() const {
     return status;
 }
 
-std::vector<Trigger> Thing::getTriggers() const {
-    return triggers;
+std::vector <Trigger> Thing::getTriggers(int i) const {
+   return triggers;
+}
+
+std::vector<Trigger>* Thing::getTriggers() {
+    return &triggers;
 }
 
 std::string Thing::getOwner() const {

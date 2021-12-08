@@ -37,11 +37,21 @@ int Handler::handleInput() {
 }
 
 int Handler::handleKey(std::string input) {
+	int check = checkCommandTriggers(input);
+	if (check == 2) {
+		if (checkTriggers() == 0) {
+			return 0;
+		}
+		return 1;
+	}
+	if (check == 0) {
+		return 0;
+	}
 	if (input == "n") {
 		// Find the destination
 		std::string destination = (dungeon->getRooms(0))[currRoomIndex].getNorth();
 		if (destination == "none") {
-			std::cout << "Cannot move north." << std::endl;
+			std::cout << "Can't go that way." << std::endl;
 		}
 		else {
 			std::vector<Room> roomList = (dungeon->getRooms(0));
@@ -65,7 +75,7 @@ int Handler::handleKey(std::string input) {
 		// Find the destination
 		std::string destination = (dungeon->getRooms(0))[currRoomIndex].getSouth();
 		if (destination == "none") {
-			std::cout << "Cannot move south." << std::endl;
+			std::cout << "Can't go that way." << std::endl;
 		}
 		else {
 			std::vector<Room> roomList = (dungeon->getRooms(0));
@@ -89,7 +99,7 @@ int Handler::handleKey(std::string input) {
 		// Find the destination
 		std::string destination = (dungeon->getRooms(0))[currRoomIndex].getEast();
 		if (destination == "none") {
-			std::cout << "Cannot move east." << std::endl;
+			std::cout << "Can't go that way." << std::endl;
 		}
 		else {
 			std::vector<Room> roomList = (dungeon->getRooms(0));
@@ -113,7 +123,7 @@ int Handler::handleKey(std::string input) {
 		// Find the destination
 		std::string destination = (dungeon->getRooms(0))[currRoomIndex].getWest();
 		if (destination == "none") {
-			std::cout << "Cannot move west." << std::endl;
+			std::cout << "Can't go that way." << std::endl;
 		}
 		else {
 			std::vector<Room> roomList = (dungeon->getRooms(0));
@@ -164,17 +174,17 @@ int Handler::handleKey(std::string input) {
 		}
 		else {
 			std::cout << "That item is not accessible from here." << std::endl;
-			return 1;
+			return checkTriggers();
 		}
 
 		// Remove the item from the room/container
 		if((*(dungeon->getRooms()))[currRoomIndex].removeItem(itemName)) {
 			// Add the item to inventory
 			inventory.push_back((dungeon->getItems(0))[itemIndex].getName());
-			std::cout << "Item " << itemName << " added to the inventory." << std::endl;
-			(*(dungeon->getItems()))[itemIndex].setOwner("");
+			std::cout << "Item " << itemName << " added to inventory." << std::endl;
+			(*(dungeon->getItems()))[itemIndex].setOwner("inventory");
 			(*(dungeon->getItems()))[itemIndex].setROC("");
-			return 1;
+			return checkTriggers();
 		}
 		else {
 			std::vector<Container> containerList = (dungeon->getContainers(0));
@@ -185,17 +195,23 @@ int Handler::handleKey(std::string input) {
 				// Find the index of the container in the room, if it is in the room
 				int containerIndex;
 				std::vector<std::string>::iterator it;
-				it = std::find_if(roomContainers.begin(), roomContainers.end(), [containerName](const std::string& i){ return i == containerName; });
+				it = std::find_if(roomContainers.begin(), roomContainers.end(), [containerName](const std::string& c){ return c == containerName; });
 				if (it != roomContainers.end()) {
 					containerIndex = it - roomContainers.begin();
+
+					// Determine the container index in the context of the dungeon list
+					std::vector<Container>::iterator it2;
+					it2 = std::find_if(containerList.begin(), containerList.end(), [containerName](const Container& c){ return c.getName() == containerName; });
+					containerIndex = it2 - containerList.begin();
+
 					if((*(dungeon->getContainers()))[containerIndex].getOpen()) {
 						if((*(dungeon->getContainers()))[containerIndex].removeItem(itemName)) {
 							// Add the item to inventory
 							inventory.push_back((dungeon->getItems(0))[itemIndex].getName());
-							std::cout << "Item " << itemName << " added to the inventory." << std::endl;
-							(*(dungeon->getItems()))[itemIndex].setOwner("");
+							std::cout << "Item " << itemName << " added to inventory." << std::endl;
+							(*(dungeon->getItems()))[itemIndex].setOwner("inventory");
 							(*(dungeon->getItems()))[itemIndex].setROC("");
-							return 1;
+							return checkTriggers();
 						}
 					}
 				}
@@ -206,8 +222,7 @@ int Handler::handleKey(std::string input) {
 	else if (input == "open exit") {
 		// See if the room is an exit
 		if ((dungeon->getRooms(0))[currRoomIndex].getType() == "exit") {
-			std::cout << "Game over" << std::endl;
-			std::cout << "Victory!" << std::endl;
+			std::cout << "Game Over" << std::endl;
 			return 0;
 		}
 		else {
@@ -221,7 +236,7 @@ int Handler::handleKey(std::string input) {
 		// Deal with an empty inventory
 		if (inventory.empty()) {
 			std::cout << itemName << " not in inventory." << std::endl;
-			return 1;
+			return checkTriggers();
 		}
 
 		// Find the index in inventory of the item we're dropping
@@ -238,12 +253,17 @@ int Handler::handleKey(std::string input) {
 			// Add item to current room
 			(*(dungeon->getRooms()))[currRoomIndex].addItem(itemName);
 
+			// Determine the itemIndex in the context of the dungeon list
+			std::vector<Item>::iterator it2;
+			it2 = std::find_if((*(dungeon->getItems())).begin(), (*(dungeon->getItems())).end(), [itemName](const Item& i){ return i.getName() == itemName; });
+			itemIndex = it2 - (*(dungeon->getItems())).begin();
+
 			(*(dungeon->getItems()))[itemIndex].setOwner(currRoom);
 			(*(dungeon->getItems()))[itemIndex].setROC("Room");
 		}
 		else {
 			std::cout << itemName << " not in inventory." << std::endl;
-			return 1;
+			return checkTriggers();
 		}
 	}
 	else if (input.substr(0,5) == "open ") {
@@ -260,6 +280,11 @@ int Handler::handleKey(std::string input) {
 		if (it != roomContainers.end()) {
 			containerIndex = it - roomContainers.begin();
 			
+			// Determine the containerIndex in the context of the dungeon list
+			std::vector<Container>::iterator it2;
+			it2 = std::find_if((*(dungeon->getContainers())).begin(), (*(dungeon->getContainers())).end(), [containerName](const Container& c){ return c.getName() == containerName; });
+			containerIndex = it2 - (*(dungeon->getContainers())).begin();
+
 			// Set the container to open
 			(*(dungeon->getContainers()))[containerIndex].setOpen(true);
 
@@ -283,7 +308,7 @@ int Handler::handleKey(std::string input) {
 		}
 		else {
 			std::cout << containerName << " is not accessible from here." << std::endl;
-			return 1;
+			return checkTriggers();
 		}
 	}
 	else if (input.substr(0,5) == "read ") {
@@ -293,7 +318,7 @@ int Handler::handleKey(std::string input) {
 		// Deal with an empty inventory
 		if (inventory.empty()) {
 			std::cout << itemName << " not in inventory." << std::endl;
-			return 1;
+			return checkTriggers();
 		}
 
 		// Find the index in inventory of the item we're dropping
@@ -302,6 +327,11 @@ int Handler::handleKey(std::string input) {
 		it = std::find_if(inventory.begin(), inventory.end(), [itemName](const std::string& i){ return i == itemName; });
 		if (it != inventory.end()) {
 			itemIndex = it - inventory.begin();
+
+			// Determine the itemIndex in the context of the dungeon list
+			std::vector<Item>::iterator it2;
+			it2 = std::find_if((*(dungeon->getItems())).begin(), (*(dungeon->getItems())).end(), [itemName](const Item& i){ return i.getName() == itemName; });
+			itemIndex = it2 - (*(dungeon->getItems())).begin();
 
 			// Get the writing on the item
 	        std::string writing = (*(dungeon->getItems()))[itemIndex].getWriting();
@@ -317,7 +347,7 @@ int Handler::handleKey(std::string input) {
 		}
 		else {
 			std::cout << itemName << " not in inventory." << std::endl;
-			return 1;
+			return checkTriggers();
 		}
 	}
 	else if (input.substr(0,4) == "put ") {
@@ -332,13 +362,13 @@ int Handler::handleKey(std::string input) {
 		}
 		else {
 			std::cout << "Command not recognized." << std::endl;
-			return 1;
+			return checkTriggers();
 		}
 		
 		// Deal with an empty inventory
 		if (inventory.empty()) {
 			std::cout << itemName << " not in inventory." << std::endl;
-			return 1;
+			return checkTriggers();
 		}
 
 		// Find the index in inventory of the item we're dropping
@@ -348,39 +378,76 @@ int Handler::handleKey(std::string input) {
 		if (it != inventory.end()) {
 			itemIndex = it - inventory.begin();
 
+			// Determine the containerIndex in the context of the dungeon list
+			int containerIndexDungeon;
+			std::vector<Container>::iterator it3;
+			it3 = std::find_if((*(dungeon->getContainers())).begin(), (*(dungeon->getContainers())).end(), [containerName](const Container& c){ return c.getName() == containerName; });
+			containerIndexDungeon = it3 - (*(dungeon->getContainers())).begin();
+
 			// Get a list of the containers in the room
 			std::vector<std::string> roomContainers = dungeon->getRooms(0)[currRoomIndex].getContainers();
 
 			// Find the index of the container in the room, if it is in the room
 			int containerIndex;
-			std::vector<std::string>::iterator it;
-			it = std::find_if(roomContainers.begin(), roomContainers.end(), [containerName](const std::string& c){ return c == containerName; });
-			if (it != roomContainers.end()) {
-				containerIndex = it - roomContainers.begin();
+			std::vector<std::string>::iterator it2;
+			it2 = std::find_if(roomContainers.begin(), roomContainers.end(), [containerName](const std::string& c){ return c == containerName; });
+			if (it2 != roomContainers.end()) {
+				containerIndex = it2 - roomContainers.begin();
 				
 				// Ensure the container is open
-				if ((*(dungeon->getContainers()))[containerIndex].getOpen()) {
+				if ((*(dungeon->getContainers()))[containerIndexDungeon].getOpen()) {
 					// Remove item from inventory
 					inventory.erase(inventory.begin() + itemIndex);
 
 					// Add item to container
-					(*(dungeon->getContainers()))[containerIndex].addItem(itemName);
+					(*(dungeon->getContainers()))[containerIndexDungeon].addItem(itemName);
+					std::cout << "Item " << itemName << " added to " << containerName << "." << std::endl;
+
+					// Determine the itemIndex in the context of the dungeon list
+					std::vector<Item>::iterator it4;
+					it4 = std::find_if((*(dungeon->getItems())).begin(), (*(dungeon->getItems())).end(), [itemName](const Item& i){ return i.getName() == itemName; });
+					itemIndex = it4 - (*(dungeon->getItems())).begin();
 
 					(*(dungeon->getItems()))[itemIndex].setOwner(containerName);
 					(*(dungeon->getItems()))[itemIndex].setROC("Container");
 				}
 				else {
-					std::cout << "Cannot add " << itemName << " to closed " << containerName << "." << std::endl;
+					// Find the index of the item in the container accept list, if it is on the list
+					std::vector<std::string> acceptList = (*(dungeon->getContainers()))[containerIndexDungeon].getAccepts();
+					int containerIndexAccept;
+					std::vector<std::string>::iterator it5;
+					it5 = std::find_if(acceptList.begin(), acceptList.end(), [itemName](const std::string& c){ return c == itemName; });
+					if (it5 != acceptList.end()) {
+						containerIndexAccept = it5 - acceptList.begin();
+
+						// Remove item from inventory
+						inventory.erase(inventory.begin() + itemIndex);
+
+						// Add item to container
+						(*(dungeon->getContainers()))[containerIndexDungeon].addItem(itemName);
+						std::cout << "Item " << itemName << " added to " << containerName << "." << std::endl;
+
+						// Determine the itemIndex in the context of the dungeon list
+						std::vector<Item>::iterator it4;
+						it4 = std::find_if((*(dungeon->getItems())).begin(), (*(dungeon->getItems())).end(), [itemName](const Item& i){ return i.getName() == itemName; });
+						itemIndex = it4 - (*(dungeon->getItems())).begin();
+
+						(*(dungeon->getItems()))[itemIndex].setOwner(containerName);
+						(*(dungeon->getItems()))[itemIndex].setROC("Container");
+					}
+					else {
+						std::cout << "Cannot add " << itemName << " to closed " << containerName << "." << std::endl;
+					}
 				}
 			}
 			else {
 				std::cout << containerName << " is not accessible from here." << std::endl;
-				return 1;
+				return checkTriggers();
 			}
 		}
 		else {
 			std::cout << itemName << " not in inventory." << std::endl;
-			return 1;
+			return checkTriggers();
 		}
 	}
 	else if (input.substr(0,8) == "turn on ") {
@@ -390,7 +457,7 @@ int Handler::handleKey(std::string input) {
 		// Deal with an empty inventory
 		if (inventory.empty()) {
 			std::cout << itemName << " not in inventory." << std::endl;
-			return 1;
+			return checkTriggers();
 		}
 
 		// Find the index in inventory of the item we're turning on
@@ -400,24 +467,113 @@ int Handler::handleKey(std::string input) {
 		if (it != inventory.end()) {
 			itemIndex = it - inventory.begin();
 
-			// Get turnon action and print
-	        std::string turnOnAction = (*(dungeon->getItems()))[itemIndex].getTurnonAction();
-			std::string turnOnPrint = (*(dungeon->getItems()))[itemIndex].getTurnonPrint();
+			// Determine the itemIndex in the context of the dungeon list
+			std::vector<Item>::iterator it2;
+			it2 = std::find_if((*(dungeon->getItems())).begin(), (*(dungeon->getItems())).end(), [itemName](const Item& i){ return i.getName() == itemName; });
+			itemIndex = it2 - (*(dungeon->getItems())).begin();
 
-			// Perform the turnon action and print the turnon print
+			std::cout << "You activate the " << itemName << "." << std::endl;
+
+			// Get turnon print and action
+			std::string turnOnPrint = (*(dungeon->getItems()))[itemIndex].getTurnonPrint();
+	        std::string turnOnAction = (*(dungeon->getItems()))[itemIndex].getTurnonAction();
+
+			// Print the turnon print and perform the turnon action
+			if (turnOnPrint != "") {
+				std::cout << turnOnPrint << std::endl;
+			}
 			if (turnOnAction != "") {
 				int check = handleBehindTheScenes(turnOnAction);
 				if (check == 0) {
 					return check;
 				}
 			}
-			if (turnOnPrint != "") {
-				std::cout << turnOnPrint << std::endl;
-			}
 		}
 		else {
 			std::cout << itemName << " not in inventory." << std::endl;
-			return 1;
+			return checkTriggers();
+		}
+	}
+	else if (input.substr(0,7) == "attack ") {
+		// Find the name of the creature and item
+		std::string restOfString = input.substr(7);
+		std::size_t found = restOfString.find(" with ");
+		std::string creatureName;
+		std::string itemName;
+		if (found != std::string::npos) {
+			creatureName = restOfString.substr(0, found);
+			itemName = restOfString.substr(found + 6);
+		}
+		else {
+			std::cout << "Command not recognized." << std::endl;
+			return checkTriggers();
+		}
+
+		// Ensure that the item is in our inventory
+		std::vector<std::string>::iterator it;
+		it = std::find_if(inventory.begin(), inventory.end(), [itemName](const std::string& i){ return i == itemName; });
+		if (it == inventory.end()) {
+			std::cout << "Item " << itemName << " not in inventory." << std::endl;
+			return checkTriggers();
+		}
+
+		// Get a list of the creatures in the room
+		std::vector<std::string> roomCreatures = dungeon->getRooms(0)[currRoomIndex].getCreatures();
+
+		// Find the index of the creature we're attacking
+		int creatureIndex;
+		std::vector<std::string>::iterator it2;
+		it2 = std::find_if(roomCreatures.begin(), roomCreatures.end(), [creatureName](const std::string& c){ return c == creatureName; });
+		if (it2 != roomCreatures.end()) {
+			creatureIndex = it2 - roomCreatures.begin();
+
+			// Determine the creatureIndex in the context of the dungeon list
+			std::vector<Creature>::iterator it3;
+			it3 = std::find_if((*(dungeon->getCreatures())).begin(), (*(dungeon->getCreatures())).end(), [creatureName](const Creature& c){ return c.getName() == creatureName; });
+			creatureIndex = it3 - (*(dungeon->getCreatures())).begin();
+
+			// Determine if the creature is vulnerable to this item
+			bool isVuln = false;
+			std::vector<std::string> vuln = (*(dungeon->getCreatures()))[creatureIndex].getVuln();
+			for (int i = 0; i < vuln.size(); i++) {
+				if (itemName == vuln[i]) {
+					isVuln = true;
+				}
+			}
+			if (!isVuln) {
+				std::cout << "Creature " << creatureName << " is not vulnerable to item " << itemName << "." << std::endl;
+				return checkTriggers();
+			}
+
+			// Get the attack object for the creature
+			Attack attack = (*(dungeon->getCreatures()))[creatureIndex].getAttack();
+
+			// Are the attack conditions met?
+			bool condsMet = true;
+			for (int i = 0; i < attack.getConditions().size(); i++) {
+				condsMet = condsMet && checkCondition(attack.getConditions()[i]);
+			}
+			if (!condsMet) {
+				std::cout << "The conditions for attack on creature " << creatureName << " are not met." << std::endl;
+				return checkTriggers();
+			}
+
+			std::cout << "You assault the " << creatureName << " with the " << itemName	<< "." << std::endl;
+
+			// Print the attack prints and perform the attack actions
+			for (int i = 0; i < attack.getPrints().size(); i++) {
+				std::cout << attack.getPrints()[i] << std::endl;
+			}
+			for (int i = 0; i < attack.getActions().size(); i++) {
+				int check = handleBehindTheScenes(attack.getActions()[i]);
+				if (check == 0) {
+					return check;
+				}
+			}
+		}
+		else {
+			std::cout << "Creature " << creatureName << " not in room." << std::endl;
+			return checkTriggers();
 		}
 	}
 	else if (input == "quit") {
@@ -426,7 +582,7 @@ int Handler::handleKey(std::string input) {
 	else {
 		std::cout << "Command not recognized." << std::endl;
 	}
-	return 1;
+	return checkTriggers();
 }
 
 int Handler::handleBehindTheScenes(std::string input) {
@@ -439,6 +595,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 		if (found != std::string::npos) {
 			objectName = restOfString.substr(0, found);
 			containerName = restOfString.substr(found + 4);
+		}
+		else {
+			std::cout << "Command not recognized." << std::endl;
+			return 1;
 		}
 
 		// Determine if room/container is a container
@@ -455,10 +615,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 			// Set item owner and ROC
 			std::vector<Item> itemList = (dungeon->getItems(0));
 			int itemIndex;
-			std::vector<Item>::iterator it;
-			it = std::find_if(itemList.begin(), itemList.end(), [objectName](const Item& i){ return i.getName() == objectName; });
-			if (it != itemList.end()) {
-				itemIndex = it - itemList.begin();
+			std::vector<Item>::iterator it3;
+			it3 = std::find_if(itemList.begin(), itemList.end(), [objectName](const Item& i){ return i.getName() == objectName; });
+			if (it3 != itemList.end()) {
+				itemIndex = it3 - itemList.begin();
 				
 				// Add the item to the room
 				(*(dungeon->getRooms()))[containerIndex].addItem(objectName);
@@ -471,20 +631,20 @@ int Handler::handleBehindTheScenes(std::string input) {
 			// If the room/container is a room:
 			std::vector<Room> roomList = (dungeon->getRooms(0));
 			int roomIndex;
-			std::vector<Room>::iterator it2;
-			it2 = std::find_if(roomList.begin(), roomList.end(), [containerName](const Room& r){ return r.getName() == containerName; });
-			if (it2 != roomList.end()) {
-				roomIndex = it2 - roomList.begin();
+			std::vector<Room>::iterator it4;
+			it4 = std::find_if(roomList.begin(), roomList.end(), [containerName](const Room& r){ return r.getName() == containerName; });
+			if (it4 != roomList.end()) {
+				roomIndex = it4 - roomList.begin();
 			}
 
 			// Determine if object is a container
 			std::vector<Container> containerList = (dungeon->getContainers(0));
 			int containerIndex;
-			std::vector<Container>::iterator it;
-			it = std::find_if(containerList.begin(), containerList.end(), [objectName](const Container& c){ return c.getName() == objectName; });
-			if (it != containerList.end()) {
-				containerIndex = it - containerList.begin();
-				
+			std::vector<Container>::iterator it5;
+			it5 = std::find_if(containerList.begin(), containerList.end(), [objectName](const Container& c){ return c.getName() == objectName; });
+			if (it5 != containerList.end()) {
+				containerIndex = it5 - containerList.begin();
+
 				// Add the container to the room
 				(*(dungeon->getRooms()))[roomIndex].addContainer(objectName);
 			}
@@ -492,10 +652,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 				// Otherwise, determine if object is an item
 				std::vector<Item> itemList = (dungeon->getItems(0));
 				int itemIndex;
-				std::vector<Item>::iterator it;
-				it = std::find_if(itemList.begin(), itemList.end(), [objectName](const Item& i){ return i.getName() == objectName; });
-				if (it != itemList.end()) {
-					itemIndex = it - itemList.begin();
+				std::vector<Item>::iterator it6;
+				it6 = std::find_if(itemList.begin(), itemList.end(), [objectName](const Item& i){ return i.getName() == objectName; });
+				if (it6 != itemList.end()) {
+					itemIndex = it6 - itemList.begin();
 					
 					// Add the item to the room
 					(*(dungeon->getRooms()))[roomIndex].addItem(objectName);
@@ -507,10 +667,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 					// Otherwise, object must be a creature
 					std::vector<Creature> creatureList = (dungeon->getCreatures(0));
 					int creatureIndex;
-					std::vector<Creature>::iterator it;
-					it = std::find_if(creatureList.begin(), creatureList.end(), [objectName](const Creature& c){ return c.getName() == objectName; });
-					if (it != creatureList.end()) {
-						creatureIndex = it - creatureList.begin();
+					std::vector<Creature>::iterator it7;
+					it7 = std::find_if(creatureList.begin(), creatureList.end(), [objectName](const Creature& c){ return c.getName() == objectName; });
+					if (it7 != creatureList.end()) {
+						creatureIndex = it7 - creatureList.begin();
 						
 						// Add the creature to the room
 						(*(dungeon->getRooms()))[roomIndex].addCreature(objectName);
@@ -553,10 +713,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 			// Determine if the object is an item
 			std::vector<Item> itemList = (dungeon->getItems(0));
 			int itemIndex;
-			std::vector<Item>::iterator it;
-			it = std::find_if(itemList.begin(), itemList.end(), [objectName](const Item& i){ return i.getName() == objectName; });
-			if (it != itemList.end()) {
-				itemIndex = it - itemList.begin();
+			std::vector<Item>::iterator it2;
+			it2 = std::find_if(itemList.begin(), itemList.end(), [objectName](const Item& i){ return i.getName() == objectName; });
+			if (it2 != itemList.end()) {
+				itemIndex = it2 - itemList.begin();
 				
 				// Account for an item in the inventory, a room, or a container
 				if ((*(dungeon->getItems()))[itemIndex].getROC() == "Room") {
@@ -594,10 +754,15 @@ int Handler::handleBehindTheScenes(std::string input) {
 
 					// Find the index of the item in our inventory
 					int itemIndex;
-					std::vector<std::string>::iterator it;
-					it = std::find_if(inventory.begin(), inventory.end(), [objectName](const std::string& i){ return i == objectName; });
-					if (it != inventory.end()) {
-						itemIndex = it - inventory.begin();
+					std::vector<std::string>::iterator it3;
+					it3 = std::find_if(inventory.begin(), inventory.end(), [objectName](const std::string& i){ return i == objectName; });
+					if (it3 != inventory.end()) {
+						itemIndex = it3 - inventory.begin();
+
+						// Determine the itemIndex in the context of the dungeon list
+						std::vector<Item>::iterator it4;
+						it4 = std::find_if((*(dungeon->getItems())).begin(), (*(dungeon->getItems())).end(), [objectName](const Item& i){ return i.getName() == objectName; });
+						itemIndex = it4 - (*(dungeon->getItems())).begin();
 						
 						// Reset the item owner and ROC
 						(*(dungeon->getItems()))[itemIndex].setOwner("");
@@ -616,10 +781,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 				// Determine if the object is a creature
 				std::vector<Creature> creatureList = (dungeon->getCreatures(0));
 				int creatureIndex;
-				std::vector<Creature>::iterator it;
-				it = std::find_if(creatureList.begin(), creatureList.end(), [objectName](const Creature& c){ return c.getName() == objectName; });
-				if (it != creatureList.end()) {
-					creatureIndex = it - creatureList.begin();
+				std::vector<Creature>::iterator it5;
+				it5 = std::find_if(creatureList.begin(), creatureList.end(), [objectName](const Creature& c){ return c.getName() == objectName; });
+				if (it5 != creatureList.end()) {
+					creatureIndex = it5 - creatureList.begin();
 					
 					// Reset the creature owner
 					(*(dungeon->getCreatures()))[creatureIndex].setOwner("");
@@ -638,10 +803,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 					// Determine if the object is a room
 					std::vector<Room> roomList = (dungeon->getRooms(0));
 					int roomIndex;
-					std::vector<Room>::iterator it;
-					it = std::find_if(roomList.begin(), roomList.end(), [objectName](const Room& r){ return r.getName() == objectName; });
-					if (it != roomList.end()) {
-						roomIndex = it - roomList.begin();
+					std::vector<Room>::iterator it6;
+					it6 = std::find_if(roomList.begin(), roomList.end(), [objectName](const Room& r){ return r.getName() == objectName; });
+					if (it6 != roomList.end()) {
+						roomIndex = it6 - roomList.begin();
 						
 						// Delete the contents of the room
 						for (int i = 0; i < (*(dungeon->getRooms()))[roomIndex].getItems().size(); i++) {
@@ -671,6 +836,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 			objectName = restOfString.substr(0, found);
 			status = restOfString.substr(found + 4);
 		}
+		else {
+			std::cout << "Command not recognized." << std::endl;
+			return 1;
+		}
 
 		// Determine if the object is a container
 		std::vector<Container> containerList = (dungeon->getContainers(0));
@@ -687,10 +856,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 			// Determine if the object is an item
 			std::vector<Item> itemList = (dungeon->getItems(0));
 			int itemIndex;
-			std::vector<Item>::iterator it;
-			it = std::find_if(itemList.begin(), itemList.end(), [objectName](const Item& i){ return i.getName() == objectName; });
-			if (it != itemList.end()) {
-				itemIndex = it - itemList.begin();
+			std::vector<Item>::iterator it2;
+			it2 = std::find_if(itemList.begin(), itemList.end(), [objectName](const Item& i){ return i.getName() == objectName; });
+			if (it2 != itemList.end()) {
+				itemIndex = it2 - itemList.begin();
 				
 				// Set the item status
 				(*(dungeon->getItems()))[itemIndex].setStatus(status);
@@ -699,10 +868,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 				// Determine if the object is a creature
 				std::vector<Creature> creatureList = (dungeon->getCreatures(0));
 				int creatureIndex;
-				std::vector<Creature>::iterator it;
-				it = std::find_if(creatureList.begin(), creatureList.end(), [objectName](const Creature& c){ return c.getName() == objectName; });
-				if (it != creatureList.end()) {
-					creatureIndex = it - creatureList.begin();
+				std::vector<Creature>::iterator it3;
+				it3 = std::find_if(creatureList.begin(), creatureList.end(), [objectName](const Creature& c){ return c.getName() == objectName; });
+				if (it3 != creatureList.end()) {
+					creatureIndex = it3 - creatureList.begin();
 					
 					// Set the creature status
 					(*(dungeon->getCreatures()))[creatureIndex].setStatus(status);
@@ -711,10 +880,10 @@ int Handler::handleBehindTheScenes(std::string input) {
 					// Determine if the object is a room
 					std::vector<Room> roomList = (dungeon->getRooms(0));
 					int roomIndex;
-					std::vector<Room>::iterator it;
-					it = std::find_if(roomList.begin(), roomList.end(), [objectName](const Room& r){ return r.getName() == objectName; });
-					if (it != roomList.end()) {
-						roomIndex = it - roomList.begin();
+					std::vector<Room>::iterator it4;
+					it4 = std::find_if(roomList.begin(), roomList.end(), [objectName](const Room& r){ return r.getName() == objectName; });
+					if (it4 != roomList.end()) {
+						roomIndex = it4 - roomList.begin();
 						
 						// Set the room status
 						(*(dungeon->getRooms()))[roomIndex].setStatus(status);
@@ -728,8 +897,9 @@ int Handler::handleBehindTheScenes(std::string input) {
 		return 0;
 	}
 	else {
-		handleKey(input);
+		return handleKey(input);
 	}
+	return 1;
 }
 
 int Handler::setObjectOwners() {
@@ -796,6 +966,7 @@ int Handler::setObjectOwners() {
 			}
 		}
 	}
+	
 	// Iterate through containers with items
 	for (int i = 0; i < (dungeon->getContainers())->size(); i++) {
 		// Iterate through the items in the container
@@ -820,4 +991,552 @@ int Handler::setObjectOwners() {
 		}
 	}
 	return 1;
+}
+
+int Handler::checkCommandTriggers(std::string command) {
+	int commandFound = false;
+	
+	// Inventory item triggers
+	for (int i = 0; i < inventory.size(); i++) {
+		int check = checkItemCommandTriggers(command, inventory[i]);
+		if (check == 0) {
+			return 0;
+		}
+		if (check == 2) {
+			commandFound = true;
+		}
+	}
+
+	// Current room triggers
+	for (int i = 0; i < (*(dungeon->getRooms()))[currRoomIndex].getTriggers(0).size(); i++) {
+		Trigger trigger = (*(dungeon->getRooms()))[currRoomIndex].getTriggers(0)[i];
+		if (trigger.getCommand() == command) {
+			// Determine if the conditions of the trigger are met
+			bool condsMet = true;
+			for (int j = 0; j < trigger.getConditions().size(); j++) {
+				condsMet = condsMet && checkCondition(trigger.getConditions()[j]);
+			}
+			if (!condsMet) {
+				continue;
+			}
+
+			// Do the type stuff
+			if (trigger.getType() == "done") {
+				continue;
+			}
+			if (trigger.getType() == "single") {
+				(*((*(dungeon->getRooms()))[currRoomIndex].getTriggers()))[i].setType("done");
+			}
+			
+			commandFound = true;
+
+			// Perform the trigger prints and actions
+			for (int i = 0; i < trigger.getPrints().size(); i++) {
+				std::cout << trigger.getPrints()[i] << std::endl;
+			}
+			for (int i = 0; i < trigger.getActions().size(); i++) {
+				int check = handleBehindTheScenes(trigger.getActions()[i]);
+				if (check == 0) {
+					return check;
+				}
+			}
+		}
+	}
+
+	// Current room item triggers
+	for (int i = 0; i < (*(dungeon->getRooms()))[currRoomIndex].getItems().size(); i++) {
+		int check = checkItemCommandTriggers(command, (*(dungeon->getRooms()))[currRoomIndex].getItems()[i]);
+		if (check == 0) {
+			return 0;
+		}
+		if (check == 2) {
+			commandFound = true;
+		}
+	}
+	
+	// Current room creature triggers
+	for (int i = 0; i < (*(dungeon->getRooms()))[currRoomIndex].getCreatures().size(); i++) {
+		std::string creature = (*(dungeon->getRooms()))[currRoomIndex].getCreatures()[i];
+		
+		// Find the index of the creature
+		int creatureIndex;
+		std::vector<Creature>::iterator it;
+		it = std::find_if((dungeon->getCreatures())->begin(), (dungeon->getCreatures())->end(), [creature](const Creature& c){ return c.getName() == creature; });
+		if (it != (dungeon->getCreatures())->end()) {
+			creatureIndex = it - (dungeon->getCreatures())->begin();
+		}
+		else {
+			std::cout << "Error: creature " << creature << " does not exist." << std::endl;
+			break;
+		}
+
+		// Find all triggers whose commands line up with our command
+		for (int i = 0; i < (*(dungeon->getCreatures()))[creatureIndex].getTriggers(0).size(); i++) {
+			Trigger trigger = (*(dungeon->getCreatures()))[creatureIndex].getTriggers(0)[i];
+			if (trigger.getCommand() == command) {
+				// Determine if the conditions of the trigger are met
+				bool condsMet = true;
+				for (int j = 0; j < trigger.getConditions().size(); j++) {
+					condsMet = condsMet && checkCondition(trigger.getConditions()[j]);
+				}
+				if (!condsMet) {
+					continue;
+				}
+
+				// Do the type stuff
+				if (trigger.getType() == "done") {
+					continue;
+				}
+				if (trigger.getType() == "single") {
+					(*((*(dungeon->getCreatures()))[creatureIndex].getTriggers()))[i].setType("done");
+				}
+				
+				commandFound = true;
+
+				// Perform the trigger prints and actions
+				for (int i = 0; i < trigger.getPrints().size(); i++) {
+					std::cout << trigger.getPrints()[i] << std::endl;
+				}
+				for (int i = 0; i < trigger.getActions().size(); i++) {
+					int check = handleBehindTheScenes(trigger.getActions()[i]);
+					if (check == 0) {
+						return check;
+					}
+				}
+			}
+		}
+	}
+
+	// Current room container and container item triggers
+	for (int i = 0; i < (*(dungeon->getRooms()))[currRoomIndex].getContainers().size(); i++) {
+		std::string container = (*(dungeon->getRooms()))[currRoomIndex].getContainers()[i];
+		
+		// Find the index of the container
+		int containerIndex;
+		std::vector<Container>::iterator it;
+		it = std::find_if((dungeon->getContainers())->begin(), (dungeon->getContainers())->end(), [container](const Container& c){ return c.getName() == container; });
+		if (it != (dungeon->getContainers())->end()) {
+			containerIndex = it - (dungeon->getContainers())->begin();
+		}
+		else {
+			std::cout << "Error: container " << container << " does not exist." << std::endl;
+			break;
+		}
+
+		// Container item triggers
+		for (int i = 0; i < (*(dungeon->getContainers()))[containerIndex].getItems().size(); i++) {
+			int check = checkItemCommandTriggers(command, (*(dungeon->getContainers()))[containerIndex].getItems()[i]);
+			if (check == 0) {
+				return 0;
+			}
+			if (check == 2) {
+				commandFound = true;
+			}
+		}
+
+		// Find all triggers whose commands line up with our command
+		for (int i = 0; i < (*(dungeon->getContainers()))[containerIndex].getTriggers(0).size(); i++) {
+			Trigger trigger = (*(dungeon->getContainers()))[containerIndex].getTriggers(0)[i];
+			if (trigger.getCommand() == command) {
+				// Determine if the conditions of the trigger are met
+				bool condsMet = true;
+				for (int j = 0; j < trigger.getConditions().size(); j++) {
+					condsMet = condsMet && checkCondition(trigger.getConditions()[j]);
+				}
+				if (!condsMet) {
+					continue;
+				}
+
+				// Do the type stuff
+				if (trigger.getType() == "done") {
+					continue;
+				}
+				if (trigger.getType() == "single") {
+					(*((*(dungeon->getContainers()))[containerIndex].getTriggers()))[i].setType("done");
+				}
+
+				commandFound = true;
+
+				// Perform the trigger prints and actions
+				for (int i = 0; i < trigger.getPrints().size(); i++) {
+					std::cout << trigger.getPrints()[i] << std::endl;
+				}
+				for (int i = 0; i < trigger.getActions().size(); i++) {
+					int check = handleBehindTheScenes(trigger.getActions()[i]);
+					if (check == 0) {
+						return check;
+					}
+				}
+			}
+		}
+	}
+
+	if (commandFound) {
+		return 2;
+	}
+	
+	return 1;
+}
+
+int Handler::checkItemCommandTriggers(std::string command, std::string item) {
+	bool commandFound = false;
+	
+	// Find the index of the item
+	int itemIndex;
+	std::vector<Item>::iterator it;
+	it = std::find_if((dungeon->getItems())->begin(), (dungeon->getItems())->end(), [item](const Item& i){ return i.getName() == item; });
+	if (it != (dungeon->getItems())->end()) {
+		itemIndex = it - (dungeon->getItems())->begin();
+	}
+	else {
+		std::cout << "Item " << item << " does not exist." << std::endl;
+		return 0;
+	}
+
+	// Find all triggers whose commands line up with our command
+	for (int i = 0; i < (*(dungeon->getItems()))[itemIndex].getTriggers(0).size(); i++) {
+		Trigger trigger = (*(dungeon->getItems()))[itemIndex].getTriggers(0)[i];
+		if (trigger.getCommand() == command) {
+			// Determine if the conditions of the trigger are met
+			bool condsMet = true;
+			for (int j = 0; j < trigger.getConditions().size(); j++) {
+				condsMet = condsMet && checkCondition(trigger.getConditions()[j]);
+			}
+			if (!condsMet) {
+				continue;
+			}
+
+			// Do the type stuff
+			if (trigger.getType() == "done") {
+				continue;
+			}
+			if (trigger.getType() == "single") {
+				(*((*(dungeon->getItems()))[itemIndex].getTriggers()))[i].setType("done");
+			}
+
+
+			// Perform the trigger prints and actions
+			for (int i = 0; i < trigger.getPrints().size(); i++) {
+				std::cout << trigger.getPrints()[i] << std::endl;
+			}
+			for (int i = 0; i < trigger.getActions().size(); i++) {
+				int check = handleBehindTheScenes(trigger.getActions()[i]);
+				if (check == 0) {
+					return check;
+				}
+			}
+		}
+	}
+
+	if (commandFound) {
+		return 2;
+	}
+
+	return 1;
+}
+
+int Handler::checkTriggers() {
+	// Inventory item triggers
+	for (int i = 0; i < inventory.size(); i++) {
+		if (checkItemTriggers(inventory[i]) == 0) {
+			return 0;
+		}
+	}
+
+	// Current room triggers
+	for (int i = 0; i < (*(dungeon->getRooms()))[currRoomIndex].getTriggers(0).size(); i++) {
+		Trigger trigger = (*(dungeon->getRooms()))[currRoomIndex].getTriggers(0)[i];
+
+		// Ensure that it's not a command trigger
+		if (trigger.getCommand() != "") {
+			continue;
+		}
+
+		// Determine if the conditions of the trigger are met
+		bool condsMet = true;
+		for (int j = 0; j < trigger.getConditions().size(); j++) {
+			condsMet = condsMet && checkCondition(trigger.getConditions()[j]);
+		}
+		if (!condsMet) {
+			continue;
+		}
+
+		// Do the type stuff
+		if (trigger.getType() == "done") {
+			continue;
+		}
+		if (trigger.getType() == "single") {
+			(*((*(dungeon->getRooms()))[currRoomIndex].getTriggers()))[i].setType("done");
+		}
+
+		// Perform the trigger prints and actions
+		for (int i = 0; i < trigger.getPrints().size(); i++) {
+			std::cout << trigger.getPrints()[i] << std::endl;
+		}
+		for (int i = 0; i < trigger.getActions().size(); i++) {
+			int check = handleBehindTheScenes(trigger.getActions()[i]);
+			if (check == 0) {
+				return check;
+			}
+		}
+	}
+
+	// Current room item triggers
+	for (int i = 0; i < (*(dungeon->getRooms()))[currRoomIndex].getItems().size(); i++) {
+		if (checkItemTriggers((*(dungeon->getRooms()))[currRoomIndex].getItems()[i]) == 0) {
+			return 0;
+		}
+	}
+
+	// Current room creature triggers
+	for (int i = 0; i < (*(dungeon->getRooms()))[currRoomIndex].getCreatures().size(); i++) {
+		std::string creature = (*(dungeon->getRooms()))[currRoomIndex].getCreatures()[i];
+		
+		// Find the index of the creature
+		int creatureIndex;
+		std::vector<Creature>::iterator it;
+		it = std::find_if((dungeon->getCreatures())->begin(), (dungeon->getCreatures())->end(), [creature](const Creature& c){ return c.getName() == creature; });
+		if (it != (dungeon->getCreatures())->end()) {
+			creatureIndex = it - (dungeon->getCreatures())->begin();
+		}
+		else {
+			std::cout << "Error: creature " << creature << " does not exist." << std::endl;
+			break;
+		}
+
+		// Find all triggers whose commands line up with our command
+		for (int i = 0; i < (*(dungeon->getCreatures()))[creatureIndex].getTriggers(0).size(); i++) {
+			Trigger trigger = (*(dungeon->getCreatures()))[creatureIndex].getTriggers(0)[i];
+
+			// Ensure that it's not a command trigger
+			if (trigger.getCommand() != "") {
+				continue;
+			}
+			
+			// Determine if the conditions of the trigger are met
+			bool condsMet = true;
+			for (int j = 0; j < trigger.getConditions().size(); j++) {
+				condsMet = condsMet && checkCondition(trigger.getConditions()[j]);
+			}
+			if (!condsMet) {
+				continue;
+			}
+
+			// Do the type stuff
+			if (trigger.getType() == "done") {
+				continue;
+			}
+			if (trigger.getType() == "single") {
+				(*((*(dungeon->getCreatures()))[creatureIndex].getTriggers()))[i].setType("done");
+			}
+
+			// Perform the trigger prints and actions
+			for (int i = 0; i < trigger.getPrints().size(); i++) {
+				std::cout << trigger.getPrints()[i] << std::endl;
+			}
+			for (int i = 0; i < trigger.getActions().size(); i++) {
+				int check = handleBehindTheScenes(trigger.getActions()[i]);
+				if (check == 0) {
+					return check;
+				}
+			}
+		}
+	}
+
+	// Current room container and container item triggers
+	for (int i = 0; i < (*(dungeon->getRooms()))[currRoomIndex].getContainers().size(); i++) {
+		std::string container = (*(dungeon->getRooms()))[currRoomIndex].getContainers()[i];
+		
+		// Find the index of the container
+		int containerIndex;
+		std::vector<Container>::iterator it;
+		it = std::find_if((dungeon->getContainers())->begin(), (dungeon->getContainers())->end(), [container](const Container& c){ return c.getName() == container; });
+		if (it != (dungeon->getContainers())->end()) {
+			containerIndex = it - (dungeon->getContainers())->begin();
+		}
+		else {
+			std::cout << "Error: container " << container << " does not exist." << std::endl;
+			break;
+		}
+
+		// Container item triggers
+		for (int i = 0; i < (*(dungeon->getContainers()))[containerIndex].getItems().size(); i++) {
+			if (checkItemTriggers((*(dungeon->getContainers()))[containerIndex].getItems()[i]) == 0) {
+				return 0;
+			}
+		}
+
+		// Find all triggers whose commands line up with our command
+		for (int i = 0; i < (*(dungeon->getContainers()))[containerIndex].getTriggers(0).size(); i++) {
+			Trigger trigger = (*(dungeon->getContainers()))[containerIndex].getTriggers(0)[i];
+
+			// Ensure that it's not a command trigger
+			if (trigger.getCommand() != "") {
+				continue;
+			}
+			
+			// Determine if the conditions of the trigger are met
+			bool condsMet = true;
+			for (int j = 0; j < trigger.getConditions().size(); j++) {
+				condsMet = condsMet && checkCondition(trigger.getConditions()[j]);
+			}
+			if (!condsMet) {
+				continue;
+			}
+
+			// Do the type stuff
+			if (trigger.getType() == "done") {
+				continue;
+			}
+			if (trigger.getType() == "single") {
+				(*((*(dungeon->getContainers()))[containerIndex].getTriggers()))[i].setType("done");
+			}
+
+			// Perform the trigger prints and actions
+			for (int i = 0; i < trigger.getPrints().size(); i++) {
+				std::cout << trigger.getPrints()[i] << std::endl;
+			}
+			for (int i = 0; i < trigger.getActions().size(); i++) {
+				int check = handleBehindTheScenes(trigger.getActions()[i]);
+				if (check == 0) {
+					return check;
+				}
+			}
+		}
+	}
+
+	return 1;
+}
+
+int Handler::checkItemTriggers(std::string item) {
+	// Find the index of the item
+	int itemIndex;
+	std::vector<Item>::iterator it;
+	it = std::find_if((dungeon->getItems())->begin(), (dungeon->getItems())->end(), [item](const Item& i){ return i.getName() == item; });
+	if (it != (dungeon->getItems())->end()) {
+		itemIndex = it - (dungeon->getItems())->begin();
+	}
+	else {
+		std::cout << "Item " << item << " does not exist." << std::endl;
+		return 0;
+	}
+
+	// Go through all triggers for the item
+	for (int i = 0; i < (*(dungeon->getItems()))[itemIndex].getTriggers(0).size(); i++) {
+		Trigger trigger = (*(dungeon->getItems()))[itemIndex].getTriggers(0)[i];
+
+		// Ensure that it's not a command trigger
+		if (trigger.getCommand() != "") {
+			continue;
+		}
+
+		// Determine if the conditions of the trigger are met
+		bool condsMet = true;
+		for (int j = 0; j < trigger.getConditions().size(); j++) {
+			condsMet = condsMet && checkCondition(trigger.getConditions()[j]);
+		}
+		if (!condsMet) {
+			continue;
+		}
+
+		// Do the type stuff
+		if (trigger.getType() == "done") {
+			continue;
+		}
+		if (trigger.getType() == "single") {
+			(*((*(dungeon->getItems()))[itemIndex].getTriggers()))[i].setType("done");
+		}
+
+		// Perform the trigger prints and actions
+		for (int i = 0; i < trigger.getPrints().size(); i++) {
+			std::cout << trigger.getPrints()[i] << std::endl;
+		}
+		for (int i = 0; i < trigger.getActions().size(); i++) {
+			int check = handleBehindTheScenes(trigger.getActions()[i]);
+			if (check == 0) {
+				return check;
+			}
+		}
+	}
+
+	return 1;
+}
+
+bool Handler::checkCondition(Condition cond) {
+	// Account for has-object-owner conditions AND object-status conditions
+	if (cond.getStatus() == "") {
+		// has-object-owner
+		std::string object = cond.getObject();
+		std::string owner = cond.getOwner();
+
+		std::vector<Item> itemList = (dungeon->getItems(0));
+		int itemIndex;
+		std::vector<Item>::iterator it;
+		it = std::find_if(itemList.begin(), itemList.end(), [object](const Item& i){ return i.getName() == object; });
+		if (it != itemList.end()) {
+			itemIndex = it - itemList.begin();
+
+			if (cond.getHas() == "yes") {
+				return (*(dungeon->getItems()))[itemIndex].getOwner() == owner;
+			}
+			else if (cond.getHas() == "no") {
+				return (*(dungeon->getItems()))[itemIndex].getOwner() != owner;
+			}
+		}
+	}
+	else {
+		// object-status
+		std::string object = cond.getObject();
+		std::string status = cond.getStatus();
+
+		// Determine if the object is a container
+		std::vector<Container> containerList = (dungeon->getContainers(0));
+		int containerIndex;
+		std::vector<Container>::iterator it;
+		it = std::find_if(containerList.begin(), containerList.end(), [object](const Container& c){ return c.getName() == object; });
+		if (it != containerList.end()) {
+			containerIndex = it - containerList.begin();
+			
+			return (*(dungeon->getContainers()))[containerIndex].getStatus() == status;
+		}
+		else {
+			// Determine if the object is an item
+			std::vector<Item> itemList = (dungeon->getItems(0));
+			int itemIndex;
+			std::vector<Item>::iterator it;
+			it = std::find_if(itemList.begin(), itemList.end(), [object](const Item& i){ return i.getName() == object; });
+			if (it != itemList.end()) {
+				itemIndex = it - itemList.begin();
+				
+				return (*(dungeon->getItems()))[itemIndex].getStatus() == status;
+			}
+			else {
+				// Determine if the object is a creature
+				std::vector<Creature> creatureList = (dungeon->getCreatures(0));
+				int creatureIndex;
+				std::vector<Creature>::iterator it;
+				it = std::find_if(creatureList.begin(), creatureList.end(), [object](const Creature& c){ return c.getName() == object; });
+				if (it != creatureList.end()) {
+					creatureIndex = it - creatureList.begin();
+					
+					return (*(dungeon->getCreatures()))[creatureIndex].getStatus() == status;
+				}
+				else {
+					// Determine if the object is a room
+					std::vector<Room> roomList = (dungeon->getRooms(0));
+					int roomIndex;
+					std::vector<Room>::iterator it;
+					it = std::find_if(roomList.begin(), roomList.end(), [object](const Room& r){ return r.getName() == object; });
+					if (it != roomList.end()) {
+						roomIndex = it - roomList.begin();
+						
+						return (*(dungeon->getRooms()))[roomIndex].getStatus() == status;
+					}
+				}
+			}
+		}
+	}
+	
+	std::cout << "Error: invalid condition." << std::endl;
+	return false;
 }

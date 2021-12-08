@@ -15,7 +15,7 @@ Room::Room(const Room& orig) {
     items = orig.getItems();
     containers = orig.getContainers();
     creatures = orig.getCreatures();
-    triggers = orig.getTriggers();
+    triggers = orig.getTriggers(0);
 }
 
 Room::~Room() {}
@@ -112,8 +112,12 @@ std::vector<std::string> Room::getCreatures() const {
     return creatures;
 }
 
-std::vector <Trigger> Room::getTriggers() const {
+std::vector<Trigger> Room::getTriggers(int i) const {
    return triggers;
+}
+
+std::vector<Trigger>* Room::getTriggers() {
+    return &triggers;
 }
 
 bool Room::removeItem(std::string itemToRemove) {

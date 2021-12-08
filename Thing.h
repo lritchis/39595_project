@@ -18,7 +18,8 @@ public:
     virtual std::string getName() const;
     virtual int getRoomNum() const;
     virtual std::string getStatus() const;
-    virtual std::vector<Trigger> getTriggers() const;
+    virtual std::vector<Trigger> getTriggers(int i) const;
+    std::vector<Trigger>* getTriggers();
     virtual std::string getOwner() const;
 
     virtual void addTrigger(Trigger triggerToAdd);
